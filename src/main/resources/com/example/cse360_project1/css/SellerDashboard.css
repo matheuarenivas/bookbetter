@@ -1,0 +1,83 @@
+.root {
+    -fx-font-family: 'Arial';
+}
+
+/*.button {*/
+/*    -fx-background-color: #800000;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*.button:hover {*/
+/*    -fx-text-fill: #640000;*/
+/*    -fx-animated: ;*/
+/*}*/
+
+.label {
+    -fx-padding: 5px;
+}
+
+.table-view {
+    -fx-border-color: lightgray;
+}
+
+.table-column {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.gray-sidebar {
+    -fx-background-color: rgb(68, 68, 68, 0.1);
+    -fx-opacity: 10;
+}
+.sidepanel-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #444444;
+    -fx-font-size: 18;
+}
+.selected {
+    -fx-text-fill: #640000;
+}
+.button {
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+}
+.button:hover {
+    -fx-cursor: hand;
+}
+.type-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #777777;
+}
+.focus {
+    -fx-text-fill: black;
+    -fx-font-size: 21px;
+}
+.h1 {
+    -fx-font-size: 32px;
+}
+.h2 {
+    -fx-font-size: 20px;
+
+}
+.blurb-text {
+    -fx-font-size: 18px;
+}
+.gray {
+    -fx-text-fill: #777777;
+}
+.blurb {
+    -fx-border-color: rgb(51, 51, 51, .25);
+    -fx-border-radius: 25px;
+    -fx-border-width: 2px;
+    -fx-background-radius: 25px;
+}
+.secondary {
+    -fx-background-color: transparent;
+    -fx-border-color: rgb(136, 136, 136,.5);
+    -fx-border-width: 3px;
+    -fx-font-weight: bold;
+
+}
+.secondary:hover {
+    -fx-background-color: rgb(136, 136, 136,.5);
+    -fx-text-fill: white;
+}

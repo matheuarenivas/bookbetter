@@ -1,0 +1,31 @@
+/* UserInfo.css */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.button {
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.vbox {
+    -fx-alignment: center;
+    -fx-spacing: 15;
+    -fx-padding: 20;
+}
+.book-order {
+    -fx-max-width: 550px;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-radius: 25px;
+}
