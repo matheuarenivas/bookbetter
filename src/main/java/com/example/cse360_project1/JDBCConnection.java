@@ -10,15 +10,7 @@ public class JDBCConnection {
     ResultSet result;
     Exception error;
     public JDBCConnection() {
-//        try {
-//            this.connection =  DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/user_schema", "root", "!!mqsqlhubbard2024");
-//
-//            Statement statement = connection.createStatement();
-//            this.result = statement.executeQuery(query);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("Connection Started");
+
     }
 
     public ResultSet fetchQuery(String query) {
@@ -35,12 +27,23 @@ public class JDBCConnection {
 
         return null;
     }
-
-    public ResultSet logIn(String username, String password) {
+    public int updateQuery(String query) {
         try {
             this.connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
+
             Statement statement = connection.createStatement();
-            this.result = statement.executeQuery("SELECT * FROM users WHERE username = '" + username + "'");
+            int update = statement.executeUpdate(query);
+            return update;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Connection Started");
+
+        return -1;
+    }
+    public ResultSet logIn(String username, String password) {
+        try {
+            this.result = fetchQuery("SELECT * FROM users WHERE username = '" + username + "'");
 
             if (result.next()) {
                 String pass = result.getString("password");
@@ -64,9 +67,7 @@ public class JDBCConnection {
     }
     public User logInReturnUser(String username, String password) {
         try {
-            this.connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
-            Statement statement = connection.createStatement();
-            this.result = statement.executeQuery("SELECT * FROM users WHERE username = '" + username + "'");
+            this.result = fetchQuery("SELECT * FROM users WHERE username = '" + username + "'");
 
             if (result.next()) {
                 String pass = result.getString("password");
@@ -95,13 +96,11 @@ public class JDBCConnection {
     }
     public ResultSet registerUser(String username, String password, String type) {
         try {
-            Connection connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery("SELECT COUNT(*) FROM users;");
+            ResultSet results = fetchQuery("SELECT COUNT(*) FROM users;");
             if (results.next()) {
 
                 int id = results.getInt(1) + 1;
-                int updateResult = statement.executeUpdate("INSERT INTO users (id, username, password, type) VALUES ('" + id + "', '" + username + "', '" + password + "', '" + type + "')");
+                int updateResult = updateQuery("INSERT INTO users (id, username, password, type) VALUES ('" + id + "', '" + username + "', '" + password + "', '" + type + "')");
                 User newUser = new User(id, username, type, password);
 
                 SceneController sceneController = Main.sceneController;
