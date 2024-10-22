@@ -50,7 +50,8 @@ public class UserSettingsPage {
     }
     public VBox sidePanel(User user) {
         VBox sidePanel = new VBox();
-        Image BookBetterCard = new Image("C:\\Users\\theba\\IdeaProjects\\CSE360_PROJECT1\\src\\main\\resources\\com\\example\\cse360_project1\\images\\BookBetterCard.png", 155.0, 30.0, true, true);
+        String imagePath = getClass().getResource("/com/example/cse360_project1/images/BookBetterCard.png").toExternalForm();
+        Image BookBetterCard = new Image(imagePath, 155.0, 30.0, true, true);
         ImageView bookBetterImageView = new ImageView(BookBetterCard);
         bookBetterImageView.setFitWidth(155.0);
         bookBetterImageView.setFitHeight(30.0);

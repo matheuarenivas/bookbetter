@@ -78,13 +78,6 @@ public class JDBCConnection {
 
                     User user = new User((int) id, username, type, password);
                     System.out.println(user.toString());
-                    SceneController sceneController = Main.sceneController;
-                    UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
-                    sceneController.switchScene(userSettingsPage.getScene());
-
-                    // Get the user info scene and pass the main scene for returning
-//                    Scene userInfoScene = userInfoCreator.getScene();
-//                    sceneController.switchScene(userInfoScene);
                     return user;
                 }
 
