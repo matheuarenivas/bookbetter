@@ -79,9 +79,12 @@ public class JDBCConnection {
 
                     User user = new User(id, username, type, password);
                     System.out.println(user.toString());
+<<<<<<< HEAD
                     // Get the user info scene and pass the main scene for returning
 //                    Scene userInfoScene = userInfoCreator.getScene();
 //                    sceneController.switchScene(userInfoScene);
+=======
+>>>>>>> b36478b4eeea129ebb3037c8e5ae70e93e32ab4a
                     return user;
                 }
 
