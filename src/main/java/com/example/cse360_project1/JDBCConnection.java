@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 
 import java.sql.DriverManager;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class JDBCConnection {
     Connection connection;
@@ -76,12 +77,8 @@ public class JDBCConnection {
                     String type = result.getString("type");
 
 
-                    User user = new User((int) id, username, type, password);
+                    User user = new User(id, username, type, password);
                     System.out.println(user.toString());
-                    SceneController sceneController = Main.sceneController;
-                    UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
-                    sceneController.switchScene(userSettingsPage.getScene());
-
                     // Get the user info scene and pass the main scene for returning
 //                    Scene userInfoScene = userInfoCreator.getScene();
 //                    sceneController.switchScene(userInfoScene);
@@ -115,5 +112,43 @@ public class JDBCConnection {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Book getBook(int id) throws SQLException {
+        try {
+            this.result = fetchQuery("SELECT * FROM books WHERE id = " + id);
+            if (result.next()) {
+                int book_id = result.getInt("book_id");
+                int collection_id = result.getInt("collection_id");
+                String book_name = result.getString("book_name");
+                String book_author = result.getString("book_author");
+                String book_condition = result.getString("book_condition");
+                String categories = result.getString("categories");
+                Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
+                return book;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public ArrayList<Book> getBookCollection(User user) {
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            this.result = fetchQuery("SELECT * FROM users u JOIN book_collections bc ON u.id = bc.user_id JOIN  books b ON bc.collection_id = b.collection_id WHERE u.id ='" + user.getId() + "';");
+            if (result.next()) {
+                int book_id = result.getInt("book_id");
+                int collection_id = result.getInt("collection_id");
+                String book_name = result.getString("book_name");
+                String book_author = result.getString("book_author");
+                String book_condition = result.getString("book_condition");
+                String categories = result.getString("categories");
+                Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
+                books.add(book);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return books;
     }
 }

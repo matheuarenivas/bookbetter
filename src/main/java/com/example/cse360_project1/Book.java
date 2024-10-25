@@ -22,9 +22,9 @@ public class Book {
         this.collectionID = collectionID;
 
         switch (condition) {
-            case "New" -> price = 10.50 * 2;
-            case "Used" -> price = 10.50 * 1.5;
-            case "Heavily Used" -> price = 10.50;
+            case "New" -> this.price = 10.50 * 2;
+            case "Used" -> this.price = 10.50 * 1.5;
+            case "Heavily Used" -> this.price = 10.50;
         }
     }
     public int getId() {

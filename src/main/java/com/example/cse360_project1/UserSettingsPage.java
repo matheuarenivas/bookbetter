@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class UserSettingsPage {
     private User user;
-    private SceneController sceneController;
+    private final SceneController sceneController;
 
     public UserSettingsPage(User user, SceneController sceneController) {
         this.user = user;
@@ -50,7 +50,8 @@ public class UserSettingsPage {
     }
     public VBox sidePanel(User user) {
         VBox sidePanel = new VBox();
-        Image BookBetterCard = new Image("C:\\Users\\theba\\IdeaProjects\\CSE360_PROJECT1\\src\\main\\resources\\com\\example\\cse360_project1\\images\\BookBetterCard.png", 155.0, 30.0, true, true);
+        String imagePath = getClass().getResource("/com/example/cse360_project1/images/BookBetterCard.png").toExternalForm();
+        Image BookBetterCard = new Image(imagePath, 155.0, 30.0, true, true);
         ImageView bookBetterImageView = new ImageView(BookBetterCard);
         bookBetterImageView.setFitWidth(155.0);
         bookBetterImageView.setFitHeight(30.0);
@@ -68,7 +69,7 @@ public class UserSettingsPage {
 
         Button dashboard = new Button("Dashboard");
         dashboard.getStyleClass().add("sidepanel-button");
-        Button list = new Button("List");
+        Button list = new Button("List a book");
         list.getStyleClass().add("sidepanel-button");
         Button transactions = new Button("Transactions");
 
@@ -102,6 +103,10 @@ public class UserSettingsPage {
         sidePanel.getChildren().addAll(bookBetterImageView, generalArea, supportArea, userArea);
         String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
         sidePanel.getStylesheets().add(css);
+
+        dashboard.setOnAction(e -> {
+
+        });
         return sidePanel;
     }
 
