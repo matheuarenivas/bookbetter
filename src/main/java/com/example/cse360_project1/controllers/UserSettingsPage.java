@@ -1,14 +1,10 @@
 package com.example.cse360_project1.controllers;
 
-import com.example.cse360_project1.LoginRegisterPage;
 import com.example.cse360_project1.models.User;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,6 +16,7 @@ public class UserSettingsPage {
     public UserSettingsPage(User user, SceneController sceneController) {
         this.user = user;
         this.sceneController = sceneController;
+
     }
 
     public Scene getScene() {
@@ -33,7 +30,7 @@ public class UserSettingsPage {
 //        AnchorPane.setBottomAnchor(conditionsPieChart, mainScene.getHeight() / 2.0);
 //        root.getChildren().addAll(pieChartBox, conditionsPieChart);
         SidePanel sidePanelObject = new SidePanel(user, sceneController);
-        VBox sidePanel = sidePanelObject.getSidePanel();
+        AnchorPane sidePanel = sidePanelObject.getSidePanel();
 
         AnchorPane.setLeftAnchor(sidePanel, 0.0);
         AnchorPane.setTopAnchor(sidePanel, 0.0);

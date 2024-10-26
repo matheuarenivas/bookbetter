@@ -1,5 +1,6 @@
 package com.example.cse360_project1;
 
+import com.example.cse360_project1.controllers.LoginRegisterPage;
 import com.example.cse360_project1.controllers.SceneController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,31 +13,21 @@ public class Main extends Application {
     static Scene userInfoScene;
     @Override
     public void start(Stage primaryStage) {
-        // Initialize SceneController with the primary stage
 
-        // Create the main scene
         VBox mainLayout = new VBox();
         Button changeButton = new Button("Go to User Info");
         mainLayout.getChildren().add(changeButton);
         Scene mainScene = new Scene(mainLayout, 1000, 750);
 
-        // Create a User and UserInfo scene
-//        User currentUser = new User(1, "John Doe", "Admin", "password123");
-//        UserInfo userInfoCreator = new UserInfo(currentUser, sceneController);
-//
-//        // Get the user info scene and pass the main scene for returning
-//        Scene userInfoScene = userInfoCreator.getScene();
+        primaryStage.setTitle("BookBetter - Login");
+        primaryStage.setScene(mainScene);
+        sceneController = new SceneController(primaryStage);
+        primaryStage.show();
 
         LoginRegisterPage loginRegisterPage = new LoginRegisterPage(sceneController);
         Scene loginRegisterScene = loginRegisterPage.getScene(mainScene);
-        // Set up button action to switch to the user info scene
+        sceneController.switchScene(loginRegisterScene);
         changeButton.setOnAction(e -> sceneController.switchScene(userInfoScene));
-
-        // Set the initial scene and show the stage
-        primaryStage.setTitle("BookBetter");
-        primaryStage.setScene(loginRegisterScene);
-        sceneController = new SceneController(primaryStage);
-        primaryStage.show();
     }
 
     public static void main(String[] args) {

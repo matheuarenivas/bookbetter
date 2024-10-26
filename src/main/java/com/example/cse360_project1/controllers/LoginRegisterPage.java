@@ -1,8 +1,5 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.controllers;
 
-import com.example.cse360_project1.controllers.Buyer;
-import com.example.cse360_project1.controllers.SceneController;
-import com.example.cse360_project1.controllers.UserSettingsPage;
 import com.example.cse360_project1.models.Error;
 import com.example.cse360_project1.models.User;
 import com.example.cse360_project1.services.JDBCConnection;

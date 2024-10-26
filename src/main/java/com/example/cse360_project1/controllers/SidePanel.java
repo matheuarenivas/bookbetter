@@ -1,15 +1,16 @@
 package com.example.cse360_project1.controllers;
 
-import com.example.cse360_project1.LoginRegisterPage;
 import com.example.cse360_project1.models.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 
 public class SidePanel {
     private final User user;
@@ -17,19 +18,18 @@ public class SidePanel {
     public SidePanel(User user, SceneController sceneController) {
         this.sceneController = sceneController;
         this.user = user;
-
     }
-    public VBox getSidePanel() {
-        VBox sidePanel = new VBox();
+    public AnchorPane getSidePanel() {
+        AnchorPane sidePanel = new AnchorPane();
         String imagePath = getClass().getResource("/com/example/cse360_project1/images/BookBetterCard.png").toExternalForm();
         Image BookBetterCard = new Image(imagePath, 155.0, 30.0, true, true);
         ImageView bookBetterImageView = new ImageView(BookBetterCard);
         bookBetterImageView.setFitWidth(155.0);
         bookBetterImageView.setFitHeight(30.0);
 
-        sidePanel.setAlignment(Pos.TOP_CENTER);
+//        sidePanel.setAlignment(Pos.TOP_CENTER);
         sidePanel.setPrefWidth(200);
-        sidePanel.setSpacing(20);
+//        sidePanel.setSpacing(20);
         sidePanel.setPadding(new Insets(20, 20, 20, 0));
         sidePanel.setPrefHeight(1280);
         sidePanel.getStyleClass().add("gray-sidebar");
@@ -41,6 +41,7 @@ public class SidePanel {
         if (user.getUserType().equals("SELLER")) {
             Button dashboard = new Button("Dashboard");
             dashboard.getStyleClass().add("sidepanel-button");
+            if (selectDefault("BookBetter - Login")) dashboard.getStyleClass().add("selected");
             Button list = new Button("List a book");
             list.getStyleClass().add("sidepanel-button");
             Button transactions = new Button("Transactions");
@@ -48,9 +49,11 @@ public class SidePanel {
             transactions.getStyleClass().add("sidepanel-button");
             generalArea.getChildren().addAll(dashboard, list, transactions);
 
+
         } else if (user.getUserType().equals("ADMIN")) {
             Button dashboard = new Button("Dashboard");
             dashboard.getStyleClass().add("sidepanel-button");
+            if (selectDefault("BookBetter - Login")) dashboard.getStyleClass().add("selected");
 
             Button orders = new Button("Orders");
             orders.getStyleClass().add("sidepanel-button");
@@ -63,13 +66,16 @@ public class SidePanel {
 
             generalArea.getChildren().addAll(dashboard, orders, users, books);
 
+
         } else if (user.getUserType().equals("BUYER")) {
             Button browse = new Button("Browse");
             browse.getStyleClass().add("sidepanel-button");
+            if (selectDefault("BookBetter - Login")) browse.getStyleClass().add("selected");
 
             Button orderHistory = new Button("Order History");
             orderHistory.getStyleClass().add("sidepanel-button");
             generalArea.getChildren().addAll(browse, orderHistory);
+
 
         }
         VBox supportArea = new VBox(10);
@@ -78,12 +84,10 @@ public class SidePanel {
 
         Button settingsButton = new Button("Settings");
         settingsButton.getStyleClass().add("sidepanel-button");
-        settingsButton.getStyleClass().add("selected");
 
         Button supportButton = new Button("Support");
         supportButton.getStyleClass().add("sidepanel-button");
         supportArea.getChildren().addAll(generalArea, supportLabel, supportButton, settingsButton);
-
 
         VBox userArea = new VBox(5);
         if (user.getUserType().equals("ADMIN")) {
@@ -104,17 +108,27 @@ public class SidePanel {
         logOutButton.getStyleClass().add("secondary");
         userArea.getChildren().addAll(userLabel, typeLabel, logOutButton);
 
-        userArea.setAlignment(Pos.BOTTOM_CENTER);
         sidePanel.getChildren().addAll(bookBetterImageView, generalArea, supportArea, userArea);
         String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
         sidePanel.getStylesheets().add(css);
+        AnchorPane.setTopAnchor(bookBetterImageView, 20.0);
+        AnchorPane.setTopAnchor(generalArea, 60.0);
+        AnchorPane.setTopAnchor(supportArea, (80 + (generalArea.getChildren().size() * 40.0) + 24));
+        userArea.setAlignment(Pos.CENTER);
+        AnchorPane.setLeftAnchor(bookBetterImageView, 20.0);
+        AnchorPane.setLeftAnchor(userArea, 25.0);
 
+        AnchorPane.setBottomAnchor(userArea, 20.0);
 
         logOutButton.setOnAction(e -> {
             LoginRegisterPage loginRegisterPage = new LoginRegisterPage(sceneController);
             sceneController.switchScene(loginRegisterPage.getScene(sceneController.getCurrentScene()));
         });
+
+
         return sidePanel;
     }
-
+    private boolean selectDefault(String title) {
+        return sceneController.getStage().getTitle().equals(title);
+    }
 }

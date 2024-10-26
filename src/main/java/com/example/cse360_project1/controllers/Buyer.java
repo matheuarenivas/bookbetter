@@ -17,11 +17,10 @@ public class Buyer {
     }
     public Scene getScene() {
         Scene mainScene = sceneController.getCurrentScene();
-        sceneController.setTitle("BookBetter - Buyer");
 
         AnchorPane root = new AnchorPane();
         SidePanel sidePanelObject = new SidePanel(user, sceneController);
-        VBox sidePanel = sidePanelObject.getSidePanel();
+        AnchorPane sidePanel = sidePanelObject.getSidePanel();
 
         AnchorPane.setLeftAnchor(sidePanel, 0.0);
         AnchorPane.setTopAnchor(sidePanel, 0.0);
@@ -32,6 +31,7 @@ public class Buyer {
         AnchorPane.setBottomAnchor(contentPane, 0.0);
         root.getChildren().addAll(sidePanel, contentPane);
         Scene scene = new Scene(root, mainScene.getWidth(), mainScene.getHeight());
+        sceneController.setTitle("BookBetter - Buyer");
 
         return scene;
     }
