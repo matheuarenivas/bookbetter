@@ -1,6 +1,11 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.services;
 
-import javafx.scene.Scene;
+import com.example.cse360_project1.*;
+import com.example.cse360_project1.controllers.SceneController;
+import com.example.cse360_project1.controllers.UserInfo;
+import com.example.cse360_project1.controllers.UserSettingsPage;
+import com.example.cse360_project1.models.Book;
+import com.example.cse360_project1.models.User;
 
 import java.sql.DriverManager;
 import java.sql.*;
@@ -79,12 +84,6 @@ public class JDBCConnection {
 
                     User user = new User(id, username, type, password);
                     System.out.println(user.toString());
-<<<<<<< HEAD
-                    // Get the user info scene and pass the main scene for returning
-//                    Scene userInfoScene = userInfoCreator.getScene();
-//                    sceneController.switchScene(userInfoScene);
-=======
->>>>>>> b36478b4eeea129ebb3037c8e5ae70e93e32ab4a
                     return user;
                 }
 

@@ -1,5 +1,6 @@
 package com.example.cse360_project1;
 
+import com.example.cse360_project1.controllers.SceneController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -7,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    static SceneController sceneController;
+    public static SceneController sceneController;
     static Scene userInfoScene;
     @Override
     public void start(Stage primaryStage) {

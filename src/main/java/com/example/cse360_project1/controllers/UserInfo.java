@@ -1,10 +1,11 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.controllers;
 
-import javafx.geometry.Pos;
+import com.example.cse360_project1.models.Book;
+import com.example.cse360_project1.models.User;
+import com.example.cse360_project1.services.UserConnection;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;

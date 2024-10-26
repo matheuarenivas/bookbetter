@@ -1,6 +1,4 @@
-package com.example.cse360_project1;
-
-import javafx.scene.Scene;
+package com.example.cse360_project1.models;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public class User {
         this.name = name;
     }
     public String getUserType() {
-        return userType;
+        return userType.toUpperCase();
     }
     public void setUserType(String userType) {
         this.userType = userType;

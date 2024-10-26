@@ -1,4 +1,4 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.controllers;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -49,6 +49,9 @@ public class SceneController {
             stage.setScene(previousScene);
             stage.show();
         }
+    }
+    public void setTitle(String title) {
+        stage.setTitle(title);
     }
 
 }

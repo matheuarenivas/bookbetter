@@ -1,4 +1,7 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.services;
+
+import com.example.cse360_project1.models.Book;
+import com.example.cse360_project1.models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

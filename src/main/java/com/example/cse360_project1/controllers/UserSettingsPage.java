@@ -1,11 +1,10 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.controllers;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.example.cse360_project1.LoginRegisterPage;
+import com.example.cse360_project1.models.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,8 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.util.Map;
 
 public class UserSettingsPage {
     private User user;
@@ -35,7 +32,9 @@ public class UserSettingsPage {
 //        AnchorPane.setBottomAnchor(pieChartBox, 0.0);
 //        AnchorPane.setBottomAnchor(conditionsPieChart, mainScene.getHeight() / 2.0);
 //        root.getChildren().addAll(pieChartBox, conditionsPieChart);
-        VBox sidePanel = sidePanel(user);
+        SidePanel sidePanelObject = new SidePanel(user, sceneController);
+        VBox sidePanel = sidePanelObject.getSidePanel();
+
         AnchorPane.setLeftAnchor(sidePanel, 0.0);
         AnchorPane.setTopAnchor(sidePanel, 0.0);
         AnchorPane.setBottomAnchor(sidePanel, 0.0);
@@ -48,68 +47,6 @@ public class UserSettingsPage {
 
         return scene;
     }
-    public VBox sidePanel(User user) {
-        VBox sidePanel = new VBox();
-        String imagePath = getClass().getResource("/com/example/cse360_project1/images/BookBetterCard.png").toExternalForm();
-        Image BookBetterCard = new Image(imagePath, 155.0, 30.0, true, true);
-        ImageView bookBetterImageView = new ImageView(BookBetterCard);
-        bookBetterImageView.setFitWidth(155.0);
-        bookBetterImageView.setFitHeight(30.0);
-
-        sidePanel.setAlignment(Pos.TOP_CENTER);
-        sidePanel.setPrefWidth(200);
-        sidePanel.setSpacing(20);
-        sidePanel.setPadding(new Insets(20, 20, 20, 0));
-        sidePanel.setPrefHeight(1280);
-        sidePanel.getStyleClass().add("gray-sidebar");
-
-        VBox generalArea = new VBox(10);
-        generalArea.setPadding(new Insets(20, 20, 20, 20));
-        Label generelLabel = new Label("General".toUpperCase());
-
-        Button dashboard = new Button("Dashboard");
-        dashboard.getStyleClass().add("sidepanel-button");
-        Button list = new Button("List a book");
-        list.getStyleClass().add("sidepanel-button");
-        Button transactions = new Button("Transactions");
-
-        transactions.getStyleClass().add("sidepanel-button");
-        generalArea.getChildren().addAll(generelLabel, dashboard, list, transactions);
-
-        VBox supportArea = new VBox(10);
-        supportArea.setPadding(new Insets(20, 20, 20, 20));
-        Label supportLabel = new Label("Support".toUpperCase());
-
-        Button settingsButton = new Button("Settings");
-        settingsButton.getStyleClass().add("sidepanel-button");
-        settingsButton.getStyleClass().add("selected");
-
-        Button supportButton = new Button("Support");
-        supportButton.getStyleClass().add("sidepanel-button");
-        supportArea.getChildren().addAll(generalArea, supportLabel, supportButton, settingsButton);
-
-
-        VBox userArea = new VBox(0);
-        userArea.setPadding(new Insets(sceneController.getCurrentScene().getHeight() / 3.5, 20, 20, 20));
-        Label userLabel = new Label(user.getName());
-
-        userLabel.getStyleClass().add("focus");
-
-        Label typeLabel = new Label(user.getUserType().toUpperCase());
-        typeLabel.getStyleClass().add("type-label");
-        userArea.getChildren().addAll(userLabel, typeLabel);
-        userArea.setAlignment(Pos.BOTTOM_CENTER);
-
-        sidePanel.getChildren().addAll(bookBetterImageView, generalArea, supportArea, userArea);
-        String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
-        sidePanel.getStylesheets().add(css);
-
-        dashboard.setOnAction(e -> {
-
-        });
-        return sidePanel;
-    }
-
     public AnchorPane contentPane(User user) {
         AnchorPane pane = new AnchorPane();
         Label accountSettingsLabel = new Label("Account Settings");

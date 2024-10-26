@@ -1,8 +1,6 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Book {
     private int id;

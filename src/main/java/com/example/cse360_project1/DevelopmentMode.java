@@ -1,5 +1,9 @@
 package com.example.cse360_project1;
 
+import com.example.cse360_project1.controllers.SceneController;
+import com.example.cse360_project1.controllers.UserSettingsPage;
+import com.example.cse360_project1.models.User;
+import com.example.cse360_project1.services.JDBCConnection;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;

@@ -1,25 +1,14 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.controllers;
 
-import com.example.cse360_project1.Book;
-import com.example.cse360_project1.SceneController;
-import com.example.cse360_project1.User;
+import com.example.cse360_project1.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
 import java.util.Map;
 public class SellerDashboard {
     private User user;

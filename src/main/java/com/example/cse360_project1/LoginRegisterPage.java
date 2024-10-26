@@ -1,5 +1,11 @@
 package com.example.cse360_project1;
 
+import com.example.cse360_project1.controllers.Buyer;
+import com.example.cse360_project1.controllers.SceneController;
+import com.example.cse360_project1.controllers.UserSettingsPage;
+import com.example.cse360_project1.models.Error;
+import com.example.cse360_project1.models.User;
+import com.example.cse360_project1.services.JDBCConnection;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -71,15 +77,24 @@ public class LoginRegisterPage {
             String userID = loginUsername.getText();
             String password = loginPassword.getText();
             if (userID.isEmpty() || password.isEmpty()) {
-                Error authError = new Error("Authentication failed: Incorrect ID or Password");
+                com.example.cse360_project1.models.Error authError = new com.example.cse360_project1.models.Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
             }
             JDBCConnection connection = new JDBCConnection();
-            ResultSet results = connection.logIn(loginUsername.getText(), loginPassword.getText());
+            User user = connection.logInReturnUser(userID, password);
 
-            if (results == null) {
-                Error authError = new Error("Authentication failed: Incorrect ID or Password");
+            if (user == null) {
+                com.example.cse360_project1.models.Error authError = new com.example.cse360_project1.models.Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
+            } else {
+                if (user.getUserType().equals("BUYER")) {
+                    Buyer newBuyer = new Buyer(user, sceneController);
+                    Scene buyerView = newBuyer.getScene();
+                    sceneController.switchScene(buyerView);
+                } else {
+                    UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
+                    sceneController.switchScene(userSettingsPage.getScene());
+                }
             }
         });
 
@@ -90,17 +105,17 @@ public class LoginRegisterPage {
             String accountType = registerType.getSelectionModel().getSelectedItem();
             // Error handling
             if (userID.isEmpty() || password.isEmpty()) {
-                Error registerError = new Error("Registration failed: Empty required field");
+                com.example.cse360_project1.models.Error registerError = new com.example.cse360_project1.models.Error("Registration failed: Empty required field");
                 registerError.displayError(root, mainScene);
             }
 
             else if (accountType.equals("Choose Account Type")) {
-                Error accountTypeError = new Error("Registration failed: Account type invalid");
+                com.example.cse360_project1.models.Error accountTypeError = new com.example.cse360_project1.models.Error("Registration failed: Account type invalid");
                 accountTypeError.displayError(root, mainScene);
             }
 
             else if (confirmPassword.isEmpty() || confirmPassword != password) {
-                Error registerError = new Error("Registration failed: Confirm password not matching");
+                com.example.cse360_project1.models.Error registerError = new Error("Registration failed: Confirm password not matching");
                 registerError.displayError(root, mainScene);
             }
 

@@ -1,4 +1,4 @@
-package com.example.cse360_project1;
+package com.example.cse360_project1.models;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
