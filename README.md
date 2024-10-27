@@ -6,6 +6,7 @@ Group 30: Bo Hubbard, Wyatt Belscher, Amal Krishna, Jacky Leon Sanchez, Matheu A
 + Prerequisites
 + Running the Project
 + Project Structure
++ Project Tasks
 ## Prerequisites
 <ul>
 
@@ -36,3 +37,10 @@ There are two ways to run the project: Main and DevelopmentMode.
 <br><br>**Main** is the default option when executing the project. It takes the user to the login page before they are able to interact with the app.
 <br>
 **DevelopmentMode** is an experimental class, meaning you can launch the program from any scene you choose, as long as it is created with no errors. It logs in with a sample user and takes you to the appropriate scene.
+
+## Tasks
+ -[ ] Admin View
+ -[ ] Seller View
+ -[ ] Buyer View
+ -[x] Login Page
+   -[x] Database Connection
