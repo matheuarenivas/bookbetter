@@ -45,6 +45,3 @@ There are two ways to run the project: Main and DevelopmentMode.
  - [ ] Buyer View
  - [x] Login Page
    - [x] Database Connection
- 
-### Misc
-Admin login username: admin | password: bookbetter1
