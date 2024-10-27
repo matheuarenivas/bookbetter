@@ -45,6 +45,10 @@ public class SidePanel {
             list.getStyleClass().add("sidepanel-button");
             Button transactions = new Button("Transactions");
 
+            dashboard.setOnAction(e -> {
+
+            });
+
             transactions.getStyleClass().add("sidepanel-button");
             generalArea.getChildren().addAll(dashboard, list, transactions);
 
@@ -70,6 +74,7 @@ public class SidePanel {
             Button orderHistory = new Button("Order History");
             orderHistory.getStyleClass().add("sidepanel-button");
             generalArea.getChildren().addAll(browse, orderHistory);
+
 
         }
         VBox supportArea = new VBox(10);
