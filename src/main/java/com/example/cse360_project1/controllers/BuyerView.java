@@ -5,13 +5,12 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 
-public class Buyer {
+public class BuyerView {
     private final User user;
     private final SceneController sceneController;
     private String tab;
-    public Buyer(User user, SceneController sceneController) {
+    public BuyerView(User user, SceneController sceneController) {
         this.user = user;
         this.sceneController = sceneController;
         this.tab = "BROWSE";

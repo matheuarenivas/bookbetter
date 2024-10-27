@@ -85,8 +85,8 @@ public class LoginRegisterPage {
                 authError.displayError(root, mainScene);
             } else {
                 if (user.getUserType().equals("BUYER")) {
-                    Buyer newBuyer = new Buyer(user, sceneController);
-                    Scene buyerView = newBuyer.getScene();
+                    BuyerView newBuyerView = new BuyerView(user, sceneController);
+                    Scene buyerView = newBuyerView.getScene();
                     sceneController.switchScene(buyerView);
                 } else {
                     UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
