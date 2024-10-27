@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SidePanel {
@@ -115,12 +116,20 @@ public class SidePanel {
 
             browse.setOnAction(e -> {
                 buyerView.setTab("BROWSE");
-                sceneController.switchScene(buyerView.getScene());
+                try {
+                    sceneController.switchScene(buyerView.getScene());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
 
             orderHistory.setOnAction(e -> {
                 buyerView.setTab("ORDERS");
-                sceneController.switchScene(buyerView.getScene());
+                try {
+                    sceneController.switchScene(buyerView.getScene());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
 
             generalArea.getChildren().addAll(browse, orderHistory);

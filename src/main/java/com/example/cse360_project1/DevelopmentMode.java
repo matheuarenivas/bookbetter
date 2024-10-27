@@ -11,11 +11,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class DevelopmentMode extends Application {
     static SceneController sceneController;
     static Scene userInfoScene;
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws SQLException {
         primaryStage.setTitle("BookBetter - Login");
         VBox mainLayout = new VBox();
         Scene mainScene = new Scene(mainLayout, 1280, 830);

@@ -1,6 +1,8 @@
 package com.example.cse360_project1.controllers;
 
+import com.example.cse360_project1.models.Book;
 import com.example.cse360_project1.models.User;
+import com.example.cse360_project1.services.JDBCConnection;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
@@ -9,6 +11,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class BuyerView {
     private final User user;
@@ -21,7 +26,7 @@ public class BuyerView {
         this.tab = "BROWSE";
     }
 
-    public Scene getScene() {
+    public Scene getScene() throws SQLException {
         Scene mainScene = sceneController.getCurrentScene();
         AnchorPane root = new AnchorPane();
         SidePanel sidePanelObject = new SidePanel(user, sceneController);
@@ -43,7 +48,7 @@ public class BuyerView {
         return scene;
     }
 
-    private AnchorPane getContentPane(Scene mainScene) {
+    private AnchorPane getContentPane(Scene mainScene) throws SQLException {
         switch (tab) {
             case "BROWSE":
                 return getBrowseSection(mainScene);
@@ -54,7 +59,7 @@ public class BuyerView {
         }
     }
 
-    public AnchorPane getBrowseSection(Scene mainScene) {
+    public AnchorPane getBrowseSection(Scene mainScene) throws SQLException {
         AnchorPane pane = new AnchorPane();
         Label booksLabel = new Label("Today's Books");
         booksLabel.getStyleClass().add("h1");
@@ -107,6 +112,12 @@ public class BuyerView {
         AnchorPane.setLeftAnchor(filters, 50.0);
 
         pane.getStylesheets().add(css);
+
+        JDBCConnection connection = new JDBCConnection();
+        ArrayList<Book> books = connection.getAllBooks();
+        for (Book book : books) {
+            System.out.println(book.toString());
+        }
         return pane;
     }
 

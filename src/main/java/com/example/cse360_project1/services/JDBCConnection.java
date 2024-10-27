@@ -120,7 +120,7 @@ public class JDBCConnection {
                 String book_name = result.getString("book_name");
                 String book_author = result.getString("book_author");
                 String book_condition = result.getString("book_condition");
-                String categories = result.getString("categories");
+                String categories = result.getString("book_categories");
                 Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
                 return book;
             }
@@ -139,7 +139,7 @@ public class JDBCConnection {
                 String book_name = result.getString("book_name");
                 String book_author = result.getString("book_author");
                 String book_condition = result.getString("book_condition");
-                String categories = result.getString("categories");
+                String categories = result.getString("book_categories");
                 Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
                 books.add(book);
             }

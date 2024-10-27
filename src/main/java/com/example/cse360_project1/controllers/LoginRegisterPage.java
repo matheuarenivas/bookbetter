@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginRegisterPage {
     private SceneController sceneController;
@@ -83,7 +84,13 @@ public class LoginRegisterPage {
             if (user == null) {
                 com.example.cse360_project1.models.Error authError = new com.example.cse360_project1.models.Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
-            } else redirectUser(user, sceneController);
+            } else {
+                try {
+                    redirectUser(user, sceneController);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         });
 
         registerButton.setOnAction(event -> {
@@ -113,7 +120,13 @@ public class LoginRegisterPage {
                 if (user == null) {
                     Error registerError = new Error("Registration failed, try again.");
                     registerError.displayError(root, mainScene);
-                } else redirectUser(user, sceneController);
+                } else {
+                    try {
+                        redirectUser(user, sceneController);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         });
         Scene loginRegisterScene = new Scene(root, mainScene.getWidth(), mainScene.getHeight());
@@ -121,7 +134,7 @@ public class LoginRegisterPage {
         loginRegisterScene.getStylesheets().add(css);
         return loginRegisterScene;
     }
-    public void redirectUser(User user, SceneController sceneController) {
+    public void redirectUser(User user, SceneController sceneController) throws SQLException {
         if (user.getUserType().equals("BUYER")) {
             BuyerView newBuyerView = new BuyerView(user, sceneController);
             newBuyerView.setTab("BROWSE");
