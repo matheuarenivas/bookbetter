@@ -39,8 +39,9 @@ There are two ways to run the project: Main and DevelopmentMode.
 **DevelopmentMode** is an experimental class, meaning you can launch the program from any scene you choose, as long as it is created with no errors. It logs in with a sample user and takes you to the appropriate scene.
 
 ## Tasks
- -[ ] Admin View
- -[ ] Seller View
- -[ ] Buyer View
- -[x] Login Page
-   -[x] Database Connection
+
+ - [ ] Admin View
+ - [ ] Seller View
+ - [ ] Buyer View
+ - [x] Login Page
+   - [x] Database Connection
