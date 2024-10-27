@@ -83,16 +83,7 @@ public class LoginRegisterPage {
             if (user == null) {
                 com.example.cse360_project1.models.Error authError = new com.example.cse360_project1.models.Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
-            } else {
-                if (user.getUserType().equals("BUYER")) {
-                    BuyerView newBuyerView = new BuyerView(user, sceneController);
-                    Scene buyerView = newBuyerView.getScene();
-                    sceneController.switchScene(buyerView);
-                } else {
-                    UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
-                    sceneController.switchScene(userSettingsPage.getScene());
-                }
-            }
+            } else redirectUser(user, sceneController);
         });
 
         registerButton.setOnAction(event -> {
@@ -102,28 +93,48 @@ public class LoginRegisterPage {
             String accountType = registerType.getSelectionModel().getSelectedItem();
             // Error handling
             if (userID.isEmpty() || password.isEmpty()) {
-                com.example.cse360_project1.models.Error registerError = new com.example.cse360_project1.models.Error("Registration failed: Empty required field");
+                Error registerError = new Error("Registration failed: Empty required field");
                 registerError.displayError(root, mainScene);
             }
 
             else if (accountType.equals("Choose Account Type")) {
-                com.example.cse360_project1.models.Error accountTypeError = new com.example.cse360_project1.models.Error("Registration failed: Account type invalid");
+                Error accountTypeError = new Error("Registration failed: Account type invalid");
                 accountTypeError.displayError(root, mainScene);
             }
 
             else if (confirmPassword.isEmpty() || confirmPassword != password) {
-                com.example.cse360_project1.models.Error registerError = new Error("Registration failed: Confirm password not matching");
+                Error registerError = new Error("Registration failed: Confirm password not matching");
                 registerError.displayError(root, mainScene);
             }
 
             if (password.equals(confirmPassword)) {
                 JDBCConnection connection = new JDBCConnection();
-                ResultSet results = connection.registerUser(userID, password, accountType);
+                User user = connection.registerUser(userID, password, accountType);
+                if (user == null) {
+                    Error registerError = new Error("Registration failed, try again.");
+                    registerError.displayError(root, mainScene);
+                } else redirectUser(user, sceneController);
             }
         });
         Scene loginRegisterScene = new Scene(root, mainScene.getWidth(), mainScene.getHeight());
         String css = getClass().getResource("/com/example/cse360_project1/css/LoginRegister.css").toExternalForm();
         loginRegisterScene.getStylesheets().add(css);
         return loginRegisterScene;
+    }
+    public void redirectUser(User user, SceneController sceneController) {
+        if (user.getUserType().equals("BUYER")) {
+            BuyerView newBuyerView = new BuyerView(user, sceneController);
+            newBuyerView.setTab("BROWSE");
+            Scene buyerView = newBuyerView.getScene();
+            sceneController.switchScene(buyerView);
+        } else if (user.getUserType().equals("SELLER")) {
+            SellerView newSellerView = new SellerView(user, sceneController);
+            Scene sellerView = newSellerView.getScene();
+            sceneController.switchScene(sellerView);
+        } else {
+            AdminView newAdminView = new AdminView(user, sceneController);
+            newAdminView.setTab("DASHBOARD");
+            sceneController.switchScene(newAdminView.getScene());
+        }
     }
 }

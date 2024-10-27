@@ -93,7 +93,7 @@ public class JDBCConnection {
         }
         return null;
     }
-    public ResultSet registerUser(String username, String password, String type) {
+    public User registerUser(String username, String password, String type) {
         try {
             ResultSet results = fetchQuery("SELECT COUNT(*) FROM users;");
             if (results.next()) {
@@ -101,13 +101,8 @@ public class JDBCConnection {
                 int id = results.getInt(1) + 1;
                 int updateResult = updateQuery("INSERT INTO users (id, username, password, type) VALUES ('" + id + "', '" + username + "', '" + password + "', '" + type + "')");
                 User newUser = new User(id, username, type, password);
-
-                SceneController sceneController = Main.sceneController;
-                UserInfo userInfoCreator = new UserInfo(newUser, sceneController);
-                UserSettingsPage userSettingsPage = new UserSettingsPage(newUser, sceneController);
                 // Get the user info scene and pass the main scene for returning
-                sceneController.switchScene(userSettingsPage.getScene());
-
+                return newUser;
             }
 
         } catch (SQLException e) {

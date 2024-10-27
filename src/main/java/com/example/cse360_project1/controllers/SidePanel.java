@@ -45,16 +45,28 @@ public class SidePanel {
             Button list = new Button("List a book");
             list.getStyleClass().add("sidepanel-button");
             Button transactions = new Button("Transactions");
+            transactions.getStyleClass().add("sidepanel-button");
+
+            SellerView sellerView = new SellerView(user, sceneController);
 
             dashboard.setOnAction(e -> {
-
+                sellerView.setTab("DASHBOARD");
+                sceneController.switchScene(sellerView.getScene());
             });
 
-            transactions.getStyleClass().add("sidepanel-button");
+            list.setOnAction(e -> {
+                sellerView.setTab("LIST");
+                sceneController.switchScene(sellerView.getScene());
+            });
+
+            transactions.setOnAction(e -> {
+                sellerView.setTab("TRANSACTIONS");
+                sceneController.switchScene(sellerView.getScene());
+            });
+
             generalArea.getChildren().addAll(dashboard, list, transactions);
-
-
-        } else if (user.getUserType().equals("ADMIN")) {
+        }
+        else if (user.getUserType().equals("ADMIN")) {
             Button dashboard = new Button("Dashboard");
             dashboard.getStyleClass().add("sidepanel-button");
             if (selectDefault("BookBetter - Login")) dashboard.getStyleClass().add("selected");
@@ -68,9 +80,29 @@ public class SidePanel {
             Button books = new Button("Books");
             books.getStyleClass().add("sidepanel-button");
 
+            AdminView adminView = new AdminView(user, sceneController);
+
+            dashboard.setOnAction(e -> {
+                adminView.setTab("DASHBOARD");
+                sceneController.switchScene(adminView.getScene());
+            });
+
+            orders.setOnAction(e -> {
+                adminView.setTab("ORDERS");
+                sceneController.switchScene(adminView.getScene());
+            });
+
+            users.setOnAction(e -> {
+                adminView.setTab("USERS");
+                sceneController.switchScene(adminView.getScene());
+            });
+
+            books.setOnAction(e -> {
+                adminView.setTab("BOOKS");
+                sceneController.switchScene(adminView.getScene());
+            });
+
             generalArea.getChildren().addAll(dashboard, orders, users, books);
-
-
         } else if (user.getUserType().equals("BUYER")) {
             Button browse = new Button("Browse");
             browse.getStyleClass().add("sidepanel-button");
@@ -78,9 +110,20 @@ public class SidePanel {
 
             Button orderHistory = new Button("Order History");
             orderHistory.getStyleClass().add("sidepanel-button");
+
+            BuyerView buyerView = new BuyerView(user, sceneController);
+
+            browse.setOnAction(e -> {
+                buyerView.setTab("BROWSE");
+                sceneController.switchScene(buyerView.getScene());
+            });
+
+            orderHistory.setOnAction(e -> {
+                buyerView.setTab("ORDERS");
+                sceneController.switchScene(buyerView.getScene());
+            });
+
             generalArea.getChildren().addAll(browse, orderHistory);
-
-
         }
         VBox supportArea = new VBox(10);
         supportArea.setPadding(new Insets(20, 20, 20, 20));
@@ -88,6 +131,9 @@ public class SidePanel {
 
         Button settingsButton = new Button("Settings");
         settingsButton.getStyleClass().add("sidepanel-button");
+
+        UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
+        settingsButton.setOnAction(e -> sceneController.switchScene(userSettingsPage.getScene()));
 
         Button supportButton = new Button("Support");
         supportButton.getStyleClass().add("sidepanel-button");
@@ -132,6 +178,8 @@ public class SidePanel {
 
         return sidePanel;
     }
+    // selectDefault: if the Stage in sceneController is "BookBetter - Login", then the program knows it should send the user to its default page i.e. seller: dashboard,
+    // buyer: browse, etc.
     private boolean selectDefault(String title) {
         return sceneController.getStage().getTitle().equals(title);
     }

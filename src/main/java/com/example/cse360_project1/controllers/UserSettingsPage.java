@@ -21,7 +21,7 @@ public class UserSettingsPage {
 
     public Scene getScene() {
         Scene mainScene = sceneController.getCurrentScene();
-        sceneController.getStage().setTitle("BookBetter - Seller Dashboard");
+        sceneController.getStage().setTitle("BookBetter - Seller");
         AnchorPane root = new AnchorPane();
 
 //        HBox pieChartBox = categoriesPieChart(user);
