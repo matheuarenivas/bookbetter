@@ -30,7 +30,7 @@ Models are made up of the core objects of the project. The user model, book mode
 ### Controllers
 These Java classes are used or implemented when we want to use a models attributes or variables in something like a **Scene**.
 ### Services
-The services module is used to run the project. See "Running the project"
+The services module is used to fetch and update data in the BookBetter MySQL Database. The server is hosted with AWS. <Code>JDBCConnection</Code> is the main service.  
 ## Running the project
 There are two ways to run the project: Main and DevelopmentMode. 
 <br><br>**Main** is the default option when executing the project. It takes the user to the login page before they are able to interact with the app.
