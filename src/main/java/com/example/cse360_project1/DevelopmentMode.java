@@ -1,5 +1,6 @@
 package com.example.cse360_project1;
 
+import com.example.cse360_project1.controllers.LoginRegisterPage;
 import com.example.cse360_project1.controllers.SceneController;
 import com.example.cse360_project1.controllers.SellerView;
 import com.example.cse360_project1.controllers.UserSettingsPage;
@@ -18,15 +19,13 @@ public class DevelopmentMode extends Application {
         primaryStage.setTitle("BookBetter - Login");
         VBox mainLayout = new VBox();
         Scene mainScene = new Scene(mainLayout, 1280, 830);
-//        LoginRegisterPage loginRegisterPage = new LoginRegisterPage(sceneController);
-//        Scene loginRegisterScene = loginRegisterPage.getScene(mainScene);
+        primaryStage.setScene(mainScene);
         sceneController = new SceneController(primaryStage);
         sceneController.setCurrentScene(mainScene);
         JDBCConnection connection = new JDBCConnection();
-        User user = connection.logInReturnUser("username", "password");
-//        UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
-        SellerView sellerView = new SellerView(user, sceneController);
-        primaryStage.setScene(sellerView.getScene());
+        User user = connection.logInReturnUser("admin", "bookbetter1");
+        LoginRegisterPage loginRegisterPage = new LoginRegisterPage(sceneController);
+        loginRegisterPage.redirectUser(user, sceneController);
         primaryStage.show();
 
 
