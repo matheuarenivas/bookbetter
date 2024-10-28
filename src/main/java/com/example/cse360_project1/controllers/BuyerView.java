@@ -3,12 +3,8 @@ package com.example.cse360_project1.controllers;
 import com.example.cse360_project1.models.User;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 
 public class BuyerView {
     private final User user;
@@ -61,51 +57,12 @@ public class BuyerView {
         booksLabel.setPadding(new Insets(20, 20, 20, 20));
         Label subtitleLabel = new Label("Browse and purchase books");
 
-        VBox filters = new VBox();
-        filters.getStyleClass().add("text-lg");
-        Label filtersLabel = new Label("Filters");
-        filtersLabel.getStyleClass().add("h2");
-
-        VBox categoriesBox = new VBox();
-        Label categoriesSubtitleLabel = new Label("Categories");
-        categoriesSubtitleLabel.getStyleClass().add("h3");
-        categoriesSubtitleLabel.getStyleClass().add("subtitle-label");
-
-        CheckBox natScienceCheckBox = new CheckBox("Natural Science");
-        CheckBox computerCheckBox = new CheckBox("Computer");
-        CheckBox mathCheckBox = new CheckBox("Math");
-        CheckBox englishLanguageCheckBox = new CheckBox("English Language");
-        CheckBox scifiCheckBox = new CheckBox("Sci-Fi");
-        CheckBox artCheckBox = new CheckBox("Art");
-        CheckBox novelCheckBox = new CheckBox("Novel");
-        categoriesBox.getChildren().addAll(categoriesSubtitleLabel, natScienceCheckBox, computerCheckBox, mathCheckBox, englishLanguageCheckBox, artCheckBox, novelCheckBox);
-
-        VBox conditionsBox = new VBox();
-        Label conditionsSubtitleLabel = new Label("Condition");
-        categoriesSubtitleLabel.getStyleClass().add("h2");
-
-        ToggleGroup conditionGroup = new ToggleGroup();
-        RadioButton usedButton = new RadioButton("Used Like New");
-        RadioButton moderateButton = new RadioButton("Moderately Used");
-        RadioButton heavilyButton = new RadioButton("Heavily Used");
-        usedButton.setToggleGroup(conditionGroup);
-        moderateButton.setToggleGroup(conditionGroup);
-        heavilyButton.setToggleGroup(conditionGroup);
-        conditionsBox.getChildren().addAll(conditionsSubtitleLabel, usedButton, moderateButton, heavilyButton);
-
-        filters.getChildren().addAll(filtersLabel, categoriesBox, conditionsBox);
-
-        pane.getChildren().addAll(booksLabel, subtitleLabel, filters);
+        pane.getChildren().addAll(booksLabel, subtitleLabel);
         String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
         AnchorPane.setTopAnchor(booksLabel, 30.0);
         AnchorPane.setLeftAnchor(booksLabel, 50.0);
-
         AnchorPane.setTopAnchor(subtitleLabel, 75.0);
         AnchorPane.setLeftAnchor(subtitleLabel, 50.0);
-
-        AnchorPane.setTopAnchor(filters, 160.0);
-        AnchorPane.setLeftAnchor(filters, 50.0);
-
         pane.getStylesheets().add(css);
         return pane;
     }

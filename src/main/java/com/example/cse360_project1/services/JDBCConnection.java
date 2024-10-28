@@ -129,25 +129,6 @@ public class JDBCConnection {
         }
         return null;
     }
-    public ArrayList<Book> getAllBooks() throws SQLException {
-        ArrayList<Book> books = new ArrayList<>();
-        try {
-            this.result = fetchQuery("SELECT * FROM books;");
-            while (result.next()) {
-                int book_id = result.getInt("book_id");
-                int collection_id = result.getInt("collection_id");
-                String book_name = result.getString("book_name");
-                String book_author = result.getString("book_author");
-                String book_condition = result.getString("book_condition");
-                String categories = result.getString("categories");
-                Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
-                books.add(book);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return books;
-    }
     public ArrayList<Book> getBookCollection(User user) {
         ArrayList<Book> books = new ArrayList<>();
         try {

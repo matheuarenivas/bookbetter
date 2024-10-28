@@ -49,7 +49,6 @@ public class UserSettingsPage {
         Label accountSettingsLabel = new Label("Account Settings");
         accountSettingsLabel.getStyleClass().add("h1");
         accountSettingsLabel.setPadding(new Insets(20, 20, 20, 20));
-
         VBox personalBlurb = new VBox(0);
         personalBlurb.getStyleClass().add("blurb");
         personalBlurb.setPadding(new Insets(20, 20, 20, 20));
@@ -92,6 +91,7 @@ public class UserSettingsPage {
         typeLabel.getStyleClass().add("blurb-text");
 
         personalBlurb.getChildren().addAll(header, userDetails, userTypeLabel, typeLabel);
+
         VBox actionBlurb = new VBox(10);
         actionBlurb.setPadding(new Insets(20, 20, 20, 20));
         actionBlurb.getStyleClass().add("blurb");
