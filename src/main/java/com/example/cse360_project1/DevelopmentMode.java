@@ -25,7 +25,7 @@ public class DevelopmentMode extends Application {
         JDBCConnection connection = new JDBCConnection();
 //        User buyer = connection.logInReturnUser("user", "pass");
 //        User admin = connection.logInReturnUser("admin", "bookbetter1");
-        User seller = connection.logInReturnUser("username", "password");
+        User seller = connection.logInReturnUser("bubbard", "catscats");
         LoginRegisterPage loginRegisterPage = new LoginRegisterPage(sceneController);
         loginRegisterPage.redirectUser(seller, sceneController);
 //        loginRegisterPage.redirectUser(admin, sceneController);

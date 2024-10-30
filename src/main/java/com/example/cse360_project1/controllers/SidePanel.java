@@ -116,20 +116,14 @@ public class SidePanel {
 
             browse.setOnAction(e -> {
                 buyerView.setTab("BROWSE");
-                try {
                     sceneController.switchScene(buyerView.getScene());
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+
             });
 
             orderHistory.setOnAction(e -> {
                 buyerView.setTab("ORDERS");
-                try {
                     sceneController.switchScene(buyerView.getScene());
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+
             });
 
             generalArea.getChildren().addAll(browse, orderHistory);

@@ -94,11 +94,9 @@ public class LoginRegisterPage {
                 Error authError = new Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
             } else {
-                try {
+
                     redirectUser(user, sceneController);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+
             }
         });
 
@@ -130,11 +128,8 @@ public class LoginRegisterPage {
                     Error registerError = new Error("Registration failed, try again.");
                     registerError.displayError(root, mainScene);
                 } else {
-                    try {
                         redirectUser(user, sceneController);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 }
             }
         });
@@ -143,7 +138,7 @@ public class LoginRegisterPage {
         loginRegisterScene.getStylesheets().add(css);
         return loginRegisterScene;
     }
-    public void redirectUser(User user, SceneController sceneController) throws SQLException {
+    public void redirectUser(User user, SceneController sceneController) {
         if (user.getUserType().equals("BUYER")) {
             BuyerView newBuyerView = new BuyerView(user, sceneController);
             newBuyerView.setTab("BROWSE");

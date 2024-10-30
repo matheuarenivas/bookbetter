@@ -1,18 +1,23 @@
 package com.example.cse360_project1.controllers;
 
 import com.example.cse360_project1.models.User;
+import com.example.cse360_project1.services.JDBCConnection;
+import com.example.cse360_project1.models.Error;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.util.Map;
 
 public class SellerView {
@@ -66,6 +71,21 @@ public class SellerView {
         titleLabel.setPadding(new Insets(20, 20, 20, 20));
         Label subtitleLabel = new Label("Track and manage your orders");
 
+        VBox totalRevenue = new VBox();
+        totalRevenue.getStyleClass().add("blurb");
+        totalRevenue.getStyleClass().add("mini");
+        totalRevenue.setSpacing(20);
+
+        Label totalRevenueLabel = new Label("Total Revenue");
+        totalRevenueLabel.getStyleClass().add("h2");
+        totalRevenue.setPadding(new Insets(20, 20, 20, 20));
+
+        Label errorLabel = new Label("No data found.");
+        errorLabel.getStyleClass().add("text-lg");
+
+        totalRevenue.getChildren().addAll(totalRevenueLabel, errorLabel);
+
+
         VBox recentOrders = new VBox();
         recentOrders.getStyleClass().add("blurb");
         recentOrders.getStyleClass().add("wide");
@@ -76,20 +96,30 @@ public class SellerView {
 
         Button viewAllButton = new Button("View All");
         viewAllButton.getStyleClass().add("secondary");
-
+        viewAllButton.setPadding(new Insets(10, 15, 10, 15));
+        viewAllButton.setOnAction(e -> {
+            this.tab = "TRANSACTIONS";
+            sceneController.switchScene(getScene());
+        });
         HBox headerBox = new HBox();
-        headerBox.setSpacing(820.0);
         headerBox.setPadding(new Insets(20, 20, 20, 20));
-        headerBox.getChildren().addAll(recentOrdersLabel, viewAllButton);
+        // Keep gap in between
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        headerBox.getChildren().addAll(recentOrdersLabel, spacer, viewAllButton);
 
         recentOrders.getChildren().add(headerBox);
 
-        pane.getChildren().addAll(titleLabel, subtitleLabel, recentOrders);
+        pane.getChildren().addAll(titleLabel, subtitleLabel, totalRevenue, recentOrders);
         String css = getClass().getResource("/com/example/cse360_project1/css/SellerView.css").toExternalForm();
         AnchorPane.setTopAnchor(titleLabel, 30.0);
         AnchorPane.setLeftAnchor(titleLabel, 50.0);
         AnchorPane.setTopAnchor(subtitleLabel, 75.0);
         AnchorPane.setLeftAnchor(subtitleLabel, 50.0);
+
+        AnchorPane.setTopAnchor(totalRevenue, 150.0);
+        AnchorPane.setLeftAnchor(totalRevenue, 50.0);
+
         AnchorPane.setLeftAnchor(recentOrders, 50.0);
 
         AnchorPane.setBottomAnchor(recentOrders, 20.0);
@@ -102,14 +132,87 @@ public class SellerView {
         Label titleLabel = new Label("List a Book");
         titleLabel.getStyleClass().add("h1");
         titleLabel.setPadding(new Insets(20, 20, 20, 20));
-        Label subtitleLabel = new Label("Add a new book to your inventory");
 
-        pane.getChildren().addAll(titleLabel, subtitleLabel);
+        Label subtitleLabel = new Label("Sell a new book.");
+
+        VBox listBlurb = new VBox();
+        listBlurb.getStyleClass().add("blurb");
+        listBlurb.getStyleClass().add("tall");
+        listBlurb.setSpacing(20.0);
+        listBlurb.setPadding(new Insets(20, 20, 20, 20));
+
+        VBox bookName = new VBox();
+        bookName.setSpacing(4.0);
+
+        Label bookNameLabel = new Label("Book Name");
+        bookNameLabel.getStyleClass().add("h3");
+
+        TextField bookNameInput = new TextField();
+        bookNameInput.setText("Enter a book name");
+        bookNameInput.getStyleClass().addAll("gray-border", "text-lg", "input");
+
+        bookName.getChildren().addAll(bookNameLabel, bookNameInput);
+
+        VBox author = new VBox();
+        author.setSpacing(4.0);
+
+        Label authorNameLabel = new Label("Author");
+        authorNameLabel.getStyleClass().add("h3");
+
+        TextField authorNameInput = new TextField();
+        authorNameInput.setText("Enter a book name");
+        authorNameInput.getStyleClass().addAll("gray-border", "text-lg", "input");
+
+        author.getChildren().addAll(authorNameLabel, authorNameInput);
+
+        VBox conditionContainer = new VBox();
+        conditionContainer.setSpacing(4.0);
+
+        Label conditionNameLabel = new Label("Condition");
+        conditionNameLabel.getStyleClass().add("h3");
+
+        HBox condition = new HBox();
+        condition.setSpacing(10);
+        ComboBox<String> conditionCombo = new ComboBox();
+        conditionCombo.getStyleClass().addAll("gray-border", "text-lg", "input");
+
+
+        conditionCombo.setValue("Choose Account Type");
+        conditionCombo.getItems().addAll("Lightly used", "Moderately used", "Heavily used ");
+
+        Button chooseImageButton = new Button("Choose Image + ");
+        chooseImageButton.getStyleClass().add("secondary");
+        chooseImageButton.setPrefWidth(150);
+        chooseImageButton.setPrefHeight(60);
+
+
+        chooseImageButton.setOnAction(e -> {
+            FileChooser imageChooser = new FileChooser();
+            imageChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")
+            );
+            File file = imageChooser.showOpenDialog(sceneController.getStage());
+            JDBCConnection connection = new JDBCConnection();
+            if (!connection.uploadImage(file, 1)) {
+                Error uploadError = new Error("Image upload error: try again.");
+                uploadError.displayError(pane, mainScene);
+            }
+        });
+
+
+        condition.getChildren().addAll((Node) conditionCombo, chooseImageButton);
+        conditionContainer.getChildren().addAll(conditionNameLabel, condition);
+        listBlurb.getChildren().addAll(bookName, author, conditionContainer);
+
+        pane.getChildren().addAll(titleLabel, subtitleLabel, listBlurb);
         String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
         AnchorPane.setTopAnchor(titleLabel, 30.0);
         AnchorPane.setLeftAnchor(titleLabel, 50.0);
         AnchorPane.setTopAnchor(subtitleLabel, 75.0);
         AnchorPane.setLeftAnchor(subtitleLabel, 50.0);
+
+        AnchorPane.setTopAnchor(listBlurb, 120.0);
+        AnchorPane.setLeftAnchor(listBlurb, 50.0);
         pane.getStylesheets().add(css);
         return pane;
     }

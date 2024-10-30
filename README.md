@@ -2,6 +2,10 @@
 CSE360 Project 
 <br></br>
 Group 30: Bo Hubbard, Wyatt Belscher, Amal Krishna, Jacky Leon Sanchez, Matheu Arenivas
+
+### Admin login
+admin | bookbetter1
+
 ## Contents
 + Prerequisites
 + Running the Project
@@ -45,3 +49,10 @@ There are two ways to run the project: Main and DevelopmentMode.
  - [ ] Buyer View
  - [x] Login Page
    - [x] Database Connection
+
+## MySQL Database Setup and Schema
+
+ - User Schema
+   -   users table
+   -   books table
+   -   book_collections table
