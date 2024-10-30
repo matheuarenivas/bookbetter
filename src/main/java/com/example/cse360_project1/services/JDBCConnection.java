@@ -2,7 +2,6 @@ package com.example.cse360_project1.services;
 
 import com.example.cse360_project1.*;
 import com.example.cse360_project1.controllers.SceneController;
-import com.example.cse360_project1.controllers.UserInfo;
 import com.example.cse360_project1.controllers.UserSettingsPage;
 import com.example.cse360_project1.models.Book;
 import com.example.cse360_project1.models.User;

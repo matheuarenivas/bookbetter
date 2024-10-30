@@ -6,6 +6,8 @@ import com.example.cse360_project1.services.JDBCConnection;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -14,7 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginRegisterPage {
-    private SceneController sceneController;
+    private final SceneController sceneController;
     public LoginRegisterPage(SceneController sceneController) {
         this.sceneController = sceneController;
     }
@@ -26,6 +28,13 @@ public class LoginRegisterPage {
         VBox mainBox = new VBox();
         mainBox.setAlignment(Pos.CENTER);
         mainBox.setSpacing(100);
+
+        String imagePath = getClass().getResource("/com/example/cse360_project1/images/BookBetterCard.png").toExternalForm();
+        Image BookBetterCard = new Image(imagePath, 620.0, 120.0, true, true);
+        ImageView bookBetterLogo = new ImageView(BookBetterCard);
+        bookBetterLogo.setFitWidth(310.0);
+        bookBetterLogo.setFitHeight(60.0);
+
         // Login section
         HBox boxes = new HBox();
         VBox loginBox = new VBox(20);
@@ -66,23 +75,23 @@ public class LoginRegisterPage {
         boxes.getChildren().addAll(loginBox, registerBox);
         boxes.setSpacing(100);
         boxes.setAlignment(Pos.CENTER);
-        mainBox.getChildren().addAll(boxes);
+        mainBox.getChildren().addAll(bookBetterLogo, boxes);
         root.getChildren().add(mainBox);
-        AnchorPane.setTopAnchor(mainBox, mainScene.getHeight() / 4.0);
+        AnchorPane.setTopAnchor(mainBox, mainScene.getHeight() / 6.5);
         AnchorPane.setLeftAnchor(mainBox, mainScene.getWidth() / 3.5);
 
         loginButton.setOnAction(event -> {
             String userID = loginUsername.getText();
             String password = loginPassword.getText();
             if (userID.isEmpty() || password.isEmpty()) {
-                com.example.cse360_project1.models.Error authError = new com.example.cse360_project1.models.Error("Authentication failed: Incorrect ID or Password");
+                Error authError = new Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
             }
             JDBCConnection connection = new JDBCConnection();
             User user = connection.logInReturnUser(userID, password);
 
             if (user == null) {
-                com.example.cse360_project1.models.Error authError = new com.example.cse360_project1.models.Error("Authentication failed: Incorrect ID or Password");
+                Error authError = new Error("Authentication failed: Incorrect ID or Password");
                 authError.displayError(root, mainScene);
             } else {
                 try {
