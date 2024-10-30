@@ -5,7 +5,11 @@ import com.example.cse360_project1.controllers.SceneController;
 import com.example.cse360_project1.controllers.UserSettingsPage;
 import com.example.cse360_project1.models.Book;
 import com.example.cse360_project1.models.User;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.DriverManager;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,8 +21,11 @@ public class JDBCConnection {
     public JDBCConnection() {
 
     }
-
-    public ResultSet fetchQuery(String query) {
+    private Connection getConnection() throws SQLException {
+        this.connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
+        return connection;
+    }
+    public ResultSet fetchQuery(String query) throws SQLException {
         try {
             this.connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
 
@@ -32,7 +39,7 @@ public class JDBCConnection {
 
         return null;
     }
-    public int updateQuery(String query) {
+    public int updateQuery(String query) throws SQLException {
         try {
             this.connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
 
@@ -110,7 +117,34 @@ public class JDBCConnection {
         return null;
     }
 
-    public Book getBook(int id) throws SQLException {
+    public boolean uploadImage(File image, int id)  {
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(200);
+
+        if (image != null) {
+            try {
+                Image newImage = new Image(image.toURI().toString());
+                imageView.setImage(newImage);
+                try (Connection currentConnection = getConnection()) {
+                    FileInputStream inputStream = new FileInputStream(image);
+                    String query = "UPDATE books SET book_image = ? WHERE book_id = ?";
+
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setBinaryStream(1, inputStream, (int) image.length());
+                    preparedStatement.setInt(2, id);
+                    int rowsInserted = preparedStatement.executeUpdate();
+                    if (rowsInserted > 0) return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    public Book getBook(int id) {
         try {
             this.result = fetchQuery("SELECT * FROM books WHERE id = " + id);
             if (result.next()) {
@@ -128,7 +162,7 @@ public class JDBCConnection {
         }
         return null;
     }
-    public ArrayList<Book> getAllBooks() throws SQLException {
+    public ArrayList<Book> getAllBooks() {
         ArrayList<Book> books = new ArrayList<>();
         try {
             this.result = fetchQuery("SELECT * FROM books;");

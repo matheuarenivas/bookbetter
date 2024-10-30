@@ -10,14 +10,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SellerView {
@@ -138,7 +136,7 @@ public class SellerView {
         VBox listBlurb = new VBox();
         listBlurb.getStyleClass().add("blurb");
         listBlurb.getStyleClass().add("tall");
-        listBlurb.setSpacing(20.0);
+        listBlurb.setSpacing(10.0);
         listBlurb.setPadding(new Insets(20, 20, 20, 20));
 
         VBox bookName = new VBox();
@@ -148,7 +146,7 @@ public class SellerView {
         bookNameLabel.getStyleClass().add("h3");
 
         TextField bookNameInput = new TextField();
-        bookNameInput.setText("Enter a book name");
+        bookNameInput.setPromptText("Enter a book name");
         bookNameInput.getStyleClass().addAll("gray-border", "text-lg", "input");
 
         bookName.getChildren().addAll(bookNameLabel, bookNameInput);
@@ -160,7 +158,7 @@ public class SellerView {
         authorNameLabel.getStyleClass().add("h3");
 
         TextField authorNameInput = new TextField();
-        authorNameInput.setText("Enter a book name");
+        authorNameInput.setPromptText("Enter the author name");
         authorNameInput.getStyleClass().addAll("gray-border", "text-lg", "input");
 
         author.getChildren().addAll(authorNameLabel, authorNameInput);
@@ -202,10 +200,40 @@ public class SellerView {
 
         condition.getChildren().addAll((Node) conditionCombo, chooseImageButton);
         conditionContainer.getChildren().addAll(conditionNameLabel, condition);
-        listBlurb.getChildren().addAll(bookName, author, conditionContainer);
+
+        ToggleButton natScienceButton = new ToggleButton("Natural Science");
+        natScienceButton.getStyleClass().add("toggle-button");
+        ToggleButton computerButton = new ToggleButton("Computer");
+        computerButton.getStyleClass().add("toggle-button");
+
+        ToggleButton mathButton = new ToggleButton("Math");
+        mathButton.getStyleClass().add("toggle-button");
+
+        ToggleButton englishLangButton = new ToggleButton("English Language");
+        englishLangButton.getStyleClass().add("toggle-button");
+
+        ToggleButton scifiButton = new ToggleButton("Sci-Fi");
+        scifiButton.getStyleClass().add("toggle-button");
+
+        ToggleButton artButton = new ToggleButton("Art");
+        artButton.getStyleClass().add("toggle-button");
+
+        ToggleButton novelButton = new ToggleButton("Novel");
+        novelButton.getStyleClass().add("toggle-button");
+
+        VBox categories = new VBox();
+        categories.setSpacing(5);
+        Label categoriesLabel = new Label("Categories");
+        categoriesLabel.getStyleClass().add("h3");
+        HBox categoriesBox1 = new HBox(10, natScienceButton, computerButton);
+        HBox categoriesBox2 = new HBox(10, mathButton, englishLangButton);
+        HBox categoriesBox3 = new HBox(10, scifiButton, artButton, novelButton);
+        categories.getChildren().addAll(categoriesLabel, categoriesBox1, categoriesBox2, categoriesBox3);
+
+        listBlurb.getChildren().addAll(bookName, author, conditionContainer, categories);
 
         pane.getChildren().addAll(titleLabel, subtitleLabel, listBlurb);
-        String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
+        String css = getClass().getResource("/com/example/cse360_project1/css/SellerView.css").toExternalForm();
         AnchorPane.setTopAnchor(titleLabel, 30.0);
         AnchorPane.setLeftAnchor(titleLabel, 50.0);
         AnchorPane.setTopAnchor(subtitleLabel, 75.0);
