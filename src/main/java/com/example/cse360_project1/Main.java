@@ -27,7 +27,6 @@ public class Main extends Application {
         LoginRegisterPage loginRegisterPage = new LoginRegisterPage(sceneController);
         Scene loginRegisterScene = loginRegisterPage.getScene(mainScene);
         sceneController.switchScene(loginRegisterScene);
-        changeButton.setOnAction(e -> sceneController.switchScene(userInfoScene));
     }
 
     public static void main(String[] args) {

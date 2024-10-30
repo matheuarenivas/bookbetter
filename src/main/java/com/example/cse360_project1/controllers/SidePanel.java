@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SidePanel {
@@ -115,12 +116,20 @@ public class SidePanel {
 
             browse.setOnAction(e -> {
                 buyerView.setTab("BROWSE");
-                sceneController.switchScene(buyerView.getScene());
+                try {
+                    sceneController.switchScene(buyerView.getScene());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
 
             orderHistory.setOnAction(e -> {
                 buyerView.setTab("ORDERS");
-                sceneController.switchScene(buyerView.getScene());
+                try {
+                    sceneController.switchScene(buyerView.getScene());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
 
             generalArea.getChildren().addAll(browse, orderHistory);
@@ -131,20 +140,25 @@ public class SidePanel {
 
         Button settingsButton = new Button("Settings");
         settingsButton.getStyleClass().add("sidepanel-button");
-
-        UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
-        settingsButton.setOnAction(e -> sceneController.switchScene(userSettingsPage.getScene()));
+        settingsButton.setOnAction(e -> {
+            UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
+            sceneController.switchScene(userSettingsPage.getScene());
+        });
 
         Button supportButton = new Button("Support");
         supportButton.getStyleClass().add("sidepanel-button");
+        supportButton.setOnAction(e -> {
+            SupportPage supportPage = new SupportPage(user, sceneController);
+            sceneController.switchScene(supportPage.getScene());
+        });
         supportArea.getChildren().addAll(generalArea, supportLabel, supportButton, settingsButton);
 
         VBox userArea = new VBox(5);
         if (user.getUserType().equals("ADMIN")) {
-            userArea.setPadding(new Insets(sceneController.getCurrentScene().getHeight() / 5, 20, 20, 20));
+            userArea.setPadding(new Insets(20, 20, 20, 20));
 
         } else {
-            userArea.setPadding(new Insets(sceneController.getCurrentScene().getHeight() / 3.5, 20, 20, 20));
+            userArea.setPadding(new Insets(20, 20, 20, 20));
         }
         Label userLabel = new Label(user.getName());
 
@@ -163,7 +177,7 @@ public class SidePanel {
         sidePanel.getStylesheets().add(css);
         AnchorPane.setTopAnchor(bookBetterImageView, 20.0);
         AnchorPane.setTopAnchor(generalArea, 60.0);
-        AnchorPane.setTopAnchor(supportArea, (80 + (generalArea.getChildren().size() * 40.0) + 24));
+        AnchorPane.setTopAnchor(supportArea, (80 + (generalArea.getChildren().size() * 40) + 24.0));
         userArea.setAlignment(Pos.CENTER);
         AnchorPane.setLeftAnchor(bookBetterImageView, 20.0);
         AnchorPane.setLeftAnchor(userArea, 25.0);

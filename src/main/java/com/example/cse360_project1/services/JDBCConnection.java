@@ -2,7 +2,6 @@ package com.example.cse360_project1.services;
 
 import com.example.cse360_project1.*;
 import com.example.cse360_project1.controllers.SceneController;
-import com.example.cse360_project1.controllers.UserInfo;
 import com.example.cse360_project1.controllers.UserSettingsPage;
 import com.example.cse360_project1.models.Book;
 import com.example.cse360_project1.models.User;
@@ -120,7 +119,7 @@ public class JDBCConnection {
                 String book_name = result.getString("book_name");
                 String book_author = result.getString("book_author");
                 String book_condition = result.getString("book_condition");
-                String categories = result.getString("categories");
+                String categories = result.getString("book_categories");
                 Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
                 return book;
             }
@@ -128,6 +127,25 @@ public class JDBCConnection {
             e.printStackTrace();
         }
         return null;
+    }
+    public ArrayList<Book> getAllBooks() throws SQLException {
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            this.result = fetchQuery("SELECT * FROM books;");
+            while (result.next()) {
+                int book_id = result.getInt("book_id");
+                int collection_id = result.getInt("collection_id");
+                String book_name = result.getString("book_name");
+                String book_author = result.getString("book_author");
+                String book_condition = result.getString("book_condition");
+                String categories = result.getString("book_categories");
+                Book book = new Book(book_id, book_name, book_author, book_condition, categories, collection_id);
+                books.add(book);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return books;
     }
     public ArrayList<Book> getBookCollection(User user) {
         ArrayList<Book> books = new ArrayList<>();

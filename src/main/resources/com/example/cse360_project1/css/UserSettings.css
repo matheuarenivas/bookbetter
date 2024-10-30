@@ -47,6 +47,9 @@
     -fx-font-size: 14px;
     -fx-text-fill: #777777;
 }
+.subtitle-label {
+    -fx-text-fill: #444444;
+}
 .focus {
     -fx-text-fill: black;
     -fx-font-size: 21px;
@@ -55,6 +58,10 @@
     -fx-font-size: 32px;
 }
 .h2 {
+    -fx-font-size: 24px;
+
+}
+.h3 {
     -fx-font-size: 20px;
 
 }
@@ -69,7 +76,19 @@
     -fx-border-radius: 25px;
     -fx-border-width: 2px;
     -fx-background-radius: 25px;
-    -fx-pref-width: 310;
+    -fx-pref-width: 350px;
+}
+.mini {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 250px;
+}
+.tall {
+    -fx-pref-width: 450px;
+    -fx-pref-height: 660px;
+}
+.wide {
+    -fx-pref-width: 990px;
+    -fx-pref-height: 380px;
 }
 .secondary {
     -fx-background-color: transparent;

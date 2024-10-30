@@ -1,0 +1,32 @@
+@import "UserSettings.css";
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: grey;
+    -fx-border-radius: 3px;
+    -fx-padding: 2px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #12B28C;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.radio-button .radio {
+    -fx-background-color: white;
+    -fx-border-color: grey;
+    -fx-border-radius: 25px;
+    -fx-padding: 3px;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: #12B28C;
+}
+
+.radio-button:selected .mark {
+    -fx-background-color: white;
+
+}
