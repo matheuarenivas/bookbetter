@@ -1,5 +1,6 @@
 package com.example.cse360_project1.models;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Book {
@@ -10,7 +11,7 @@ public class Book {
     private ArrayList<String> categories;
     private int collectionID;
     private double price;
-
+    private File image;
     public Book(int id, String name, String author, String condition, String categoiesJSON, int collectionID) {
         this.id = id;
         this.name = name;
@@ -18,6 +19,22 @@ public class Book {
         this.condition = condition;
         this.categories = parseJSON(categoiesJSON);
         this.collectionID = collectionID;
+        this.image = null;
+
+        switch (condition) {
+            case "New" -> this.price = 10.50 * 2;
+            case "Used" -> this.price = 10.50 * 1.5;
+            case "Heavily Used" -> this.price = 10.50;
+        }
+    }
+    public Book(int id, String name, String author, String condition, String categoiesJSON, int collectionID, File image) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.condition = condition;
+        this.categories = parseJSON(categoiesJSON);
+        this.collectionID = collectionID;
+        this.image = image;
 
         switch (condition) {
             case "New" -> this.price = 10.50 * 2;
@@ -77,15 +94,36 @@ public class Book {
         this.collectionID = collectionID;
     }
     public ArrayList<String> parseJSON(String json) {
+
         String trimmed = json.substring(1, json.length() - 1);
         String[] items = trimmed.split(",\\s*");
+        if (items.length == 0) return new ArrayList<>();
 
-        // Remove quotes around each item and add to the list
         ArrayList<String> list = new ArrayList<>();
+
         for (String item : items) {
-            list.add(item.substring(1, item.length() - 1));
+            item = item.trim().replaceAll("^\"|\"$", "");  // Remove surrounding double quotes
+
+            if (!item.isEmpty()) {
+                list.add(item);
+            }
         }
+
         return list;
+    }
+    public String categoriesToJSON(ArrayList<String> categories) {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[");
+
+        for (int i = 0; i < categories.size(); i++) {
+            jsonBuilder.append("\"").append(categories.get(i)).append("\"");
+            if (i < categories.size() - 1) {
+                jsonBuilder.append(", ");
+            }
+        }
+
+        jsonBuilder.append("]");
+        return jsonBuilder.toString();
     }
     public double getPrice() {
         return price;
@@ -94,6 +132,12 @@ public class Book {
         this.price = price;
     }
 
+    public File getImage() {
+        return image;
+    }
+    public void setImage(File image) {
+        this.image = image;
+    }
     @Override
     public String toString() {
         return name + ", $" + price + " " + author + " " + condition + " " + stringCategories(categories);

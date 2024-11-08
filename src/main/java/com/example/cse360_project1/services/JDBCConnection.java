@@ -6,10 +6,10 @@ import com.example.cse360_project1.controllers.UserSettingsPage;
 import com.example.cse360_project1.models.Book;
 import com.example.cse360_project1.models.User;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.DriverManager;
 import java.sql.*;
 import java.util.ArrayList;
@@ -118,14 +118,10 @@ public class JDBCConnection {
     }
 
     public boolean uploadImage(File image, int id)  {
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(200);
-        imageView.setFitHeight(200);
+
 
         if (image != null) {
             try {
-                Image newImage = new Image(image.toURI().toString());
-                imageView.setImage(newImage);
                 try (Connection currentConnection = getConnection()) {
                     FileInputStream inputStream = new FileInputStream(image);
                     String query = "UPDATE books SET book_image = ? WHERE book_id = ?";
@@ -141,6 +137,37 @@ public class JDBCConnection {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        return false;
+    }
+    public boolean addBook(Book book) {
+        int results = -1;
+        try {
+            ResultSet collectionsResults = fetchQuery("SELECT FROM book_collections WHERE user_id = " + book.getCollectionID());
+            if (!collectionsResults.next()) {
+            }
+            if (book.getImage() == null) results = updateQuery("INSERT INTO books (collection_id, book_author, book_name, book_condition, book_categories) VALUES ('" + book.getCollectionID() + "', '" + book.getAuthor() + "', " + book.getCondition() + ", '" + book.getCategories() + "')");
+            else {
+                String query = "INSERT INTO books (collection_id, book_author, book_name, book_condition, book_categories, book_image) VALUES (?, ?, ?, ?, CAST(? AS JSON), ?)";
+                try (Connection currentConnection = getConnection()) {
+
+                    FileInputStream inputStream = new FileInputStream(book.getImage());
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setInt(1, book.getCollectionID());
+                    preparedStatement.setString(2, book.getAuthor());
+                    preparedStatement.setString(3, book.getName());
+                    preparedStatement.setString(4, book.getCondition());
+                    preparedStatement.setString(5, book.categoriesToJSON(book.getCategories()));
+                    preparedStatement.setBinaryStream(6, inputStream, (int) book.getImage().length());
+                    System.out.println(preparedStatement);
+                    int rowsInserted = preparedStatement.executeUpdate();
+                    if (rowsInserted > 0) return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

@@ -2,10 +2,9 @@
     -fx-font-family: 'Arial';
 }
 
-/*.button {*/
-/*    -fx-background-color: #800000;*/
-/*    -fx-text-fill: white;*/
-/*}*/
+.button {
+    -fx-cursor: hand;
+}
 
 /*.button:hover {*/
 /*    -fx-text-fill: #640000;*/
@@ -107,11 +106,9 @@
     -fx-text-fill: white;
 }
 .primary:hover {
-
     -fx-border-width: 3px;
     -fx-border-style: solid inside;
     -fx-border-color: transparent;
-
 }
 .danger {
     -fx-font-weight: bold;

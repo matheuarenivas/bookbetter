@@ -1,8 +1,9 @@
 package com.example.cse360_project1.controllers;
 
+import com.example.cse360_project1.models.Book;
+import com.example.cse360_project1.models.Error;
 import com.example.cse360_project1.models.User;
 import com.example.cse360_project1.services.JDBCConnection;
-import com.example.cse360_project1.models.Error;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -16,7 +17,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SellerView {
     private final User user;
@@ -139,8 +142,8 @@ public class SellerView {
         listBlurb.setSpacing(10.0);
         listBlurb.setPadding(new Insets(20, 20, 20, 20));
 
-        VBox bookName = new VBox();
-        bookName.setSpacing(4.0);
+        VBox bookNameVBox = new VBox();
+        bookNameVBox.setSpacing(4.0);
 
         Label bookNameLabel = new Label("Book Name");
         bookNameLabel.getStyleClass().add("h3");
@@ -149,7 +152,7 @@ public class SellerView {
         bookNameInput.setPromptText("Enter a book name");
         bookNameInput.getStyleClass().addAll("gray-border", "text-lg", "input");
 
-        bookName.getChildren().addAll(bookNameLabel, bookNameInput);
+        bookNameVBox.getChildren().addAll(bookNameLabel, bookNameInput);
 
         VBox author = new VBox();
         author.setSpacing(4.0);
@@ -183,44 +186,61 @@ public class SellerView {
         chooseImageButton.setPrefWidth(150);
         chooseImageButton.setPrefHeight(60);
 
-
+        AtomicReference<File> imageFile = new AtomicReference<>();
         chooseImageButton.setOnAction(e -> {
             FileChooser imageChooser = new FileChooser();
             imageChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")
             );
-            File file = imageChooser.showOpenDialog(sceneController.getStage());
-            JDBCConnection connection = new JDBCConnection();
-            if (!connection.uploadImage(file, 1)) {
-                Error uploadError = new Error("Image upload error: try again.");
-                uploadError.displayError(pane, mainScene);
+            imageFile.set(imageChooser.showOpenDialog(sceneController.getStage()));
+            if (imageFile.get() != null) {
+                chooseImageButton.setText(imageFile.get().getName());
             }
         });
 
 
         condition.getChildren().addAll((Node) conditionCombo, chooseImageButton);
         conditionContainer.getChildren().addAll(conditionNameLabel, condition);
-
+        ArrayList<ToggleButton> allCategories = new ArrayList<>();
+        ArrayList<String> selectedCategories = new ArrayList<>();
         ToggleButton natScienceButton = new ToggleButton("Natural Science");
         natScienceButton.getStyleClass().add("toggle-button");
+        allCategories.add(natScienceButton);
         ToggleButton computerButton = new ToggleButton("Computer");
         computerButton.getStyleClass().add("toggle-button");
+        allCategories.add(computerButton);
 
         ToggleButton mathButton = new ToggleButton("Math");
         mathButton.getStyleClass().add("toggle-button");
+        allCategories.add(mathButton);
 
         ToggleButton englishLangButton = new ToggleButton("English Language");
         englishLangButton.getStyleClass().add("toggle-button");
+        allCategories.add(englishLangButton);
 
         ToggleButton scifiButton = new ToggleButton("Sci-Fi");
         scifiButton.getStyleClass().add("toggle-button");
+        allCategories.add(scifiButton);
 
         ToggleButton artButton = new ToggleButton("Art");
         artButton.getStyleClass().add("toggle-button");
+        allCategories.add(artButton);
 
         ToggleButton novelButton = new ToggleButton("Novel");
         novelButton.getStyleClass().add("toggle-button");
+        allCategories.add(novelButton);
 
+        for (ToggleButton button: allCategories) {
+            button.setOnAction(e -> {
+                if (button.isSelected()) {
+                    selectedCategories.add(button.getText());
+                }
+                else {
+                    selectedCategories.remove(button.getText());
+
+                }
+            });
+        }
         VBox categories = new VBox();
         categories.setSpacing(5);
         Label categoriesLabel = new Label("Categories");
@@ -230,7 +250,19 @@ public class SellerView {
         HBox categoriesBox3 = new HBox(10, scifiButton, artButton, novelButton);
         categories.getChildren().addAll(categoriesLabel, categoriesBox1, categoriesBox2, categoriesBox3);
 
-        listBlurb.getChildren().addAll(bookName, author, conditionContainer, categories);
+        Button submitButton = new Button("List your book");
+        submitButton.getStyleClass().add("h3");
+        submitButton.getStyleClass().add("button");
+        submitButton.setStyle("-fx-pref-width: 300px; -fx-background-color: #640000; -fx-text-fill: white; -fx-pref-height: 50px;");
+
+        HBox submitArea = new HBox();
+        submitArea.setPadding(new Insets(20, 20, 20, 20));
+        Region spacerLeft =  new Region();
+        HBox.setHgrow(spacerLeft, Priority.ALWAYS);
+        Region spacerRight =  new Region();
+        HBox.setHgrow(spacerRight, Priority.ALWAYS);
+        submitArea.getChildren().addAll(spacerLeft, submitButton, spacerRight);
+        listBlurb.getChildren().addAll(bookNameVBox, author, conditionContainer, categories, submitArea);
 
         pane.getChildren().addAll(titleLabel, subtitleLabel, listBlurb);
         String css = getClass().getResource("/com/example/cse360_project1/css/SellerView.css").toExternalForm();
@@ -242,6 +274,27 @@ public class SellerView {
         AnchorPane.setTopAnchor(listBlurb, 120.0);
         AnchorPane.setLeftAnchor(listBlurb, 50.0);
         pane.getStylesheets().add(css);
+
+        submitButton.setOnAction(e -> {
+           String bookName = bookNameInput.getText();
+           String bookAuthor = authorNameInput.getText();
+           String bookCondition = conditionCombo.getValue();
+           String bookCategories = Arrays.toString(selectedCategories.toArray());
+
+           if (bookName.isEmpty() || bookAuthor.isEmpty() || bookCondition.isEmpty() || bookCategories.isEmpty()) {
+               Error emptyFieldError = new Error("Submit error: One or more empty field");
+               emptyFieldError.displayError(pane, mainScene);
+           } else if (imageFile.get() == null) {
+               Error imageError = new Error("Submit error: Image failed");
+               imageError.displayError(pane, mainScene);
+           }
+
+            Book newBook = new Book(user.getId(), bookName, bookAuthor, bookCondition, bookCategories, user.getId(), imageFile.get());
+            JDBCConnection connection = new JDBCConnection();
+            if (connection.addBook(newBook)) {
+                System.out.println("Book added" + newBook.getName());
+            }
+        });
         return pane;
     }
 
