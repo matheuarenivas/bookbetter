@@ -110,6 +110,10 @@
     -fx-border-style: solid inside;
     -fx-border-color: transparent;
 }
+.maroon {
+    -fx-background-color: #640000;
+    -fx-text-fill: white;
+}
 .danger {
     -fx-font-weight: bold;
     -fx-background-color: #c1121f;

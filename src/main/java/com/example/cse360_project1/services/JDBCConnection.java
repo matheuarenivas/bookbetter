@@ -139,17 +139,23 @@ public class JDBCConnection {
         }
         return false;
     }
+    public boolean bookCollectionExists(Book book) {
+        try (Connection newConnection = getConnection()) {
+            String checkCollection = "SELECT COUNT(*) FROM book_collections WHERE user_id = " + book.getCollectionID();
+            this.result = fetchQuery(checkCollection);
+            if (result.next()) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    };
     public boolean addBook(Book book) {
         int results = -1;
         try {
-            String checkCollection = "SELECT COUNT(*) FROM book_collections WHERE user_id = ?";
-            PreparedStatement collectionStatement = connection.prepareStatement(checkCollection);
-            collectionStatement.setInt(1, book.getCollectionID());
-            int rowsInserted = collectionStatement.executeUpdate();
-            if (rowsInserted < 0) {
+            // Check if user has a book collection associated with their ID else create one
+            if (!bookCollectionExists(book)) {
                 updateQuery("INSERT INTO book_collections (user_id) VALUE (" + book.getCollectionID() + ")");
             }
-
             if (book.getImage() == null) results = updateQuery("INSERT INTO books (collection_id, book_author, book_name, book_condition, book_categories) VALUES ('" + book.getCollectionID() + "', '" + book.getAuthor() + "', " + book.getCondition() + ", '" + book.getCategories() + "')");
             else {
                 String query = "INSERT INTO books (collection_id, book_author, book_name, book_condition, book_categories, book_image) VALUES (?, ?, ?, ?, CAST(? AS JSON), ?)";
@@ -164,8 +170,8 @@ public class JDBCConnection {
                     preparedStatement.setString(5, book.categoriesToJSON(book.getCategories()));
                     preparedStatement.setBinaryStream(6, inputStream, (int) book.getImage().length());
                     System.out.println(preparedStatement);
-                    int rowsInserted = preparedStatement.executeUpdate();
-                    if (rowsInserted > 0) return true;
+                    int newRowsInserted = preparedStatement.executeUpdate();
+                    if (newRowsInserted > 0) return true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

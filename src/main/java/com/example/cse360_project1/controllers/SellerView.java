@@ -60,6 +60,8 @@ public class SellerView {
                 return getListBook(mainScene);
             case "TRANSACTIONS":
                 return getTransactions(mainScene);
+            case "LIST_SUCCESS":
+                return getListBookSuccess();
             default:
                 return getDashboard(mainScene);
         }
@@ -280,21 +282,78 @@ public class SellerView {
            String bookAuthor = authorNameInput.getText();
            String bookCondition = conditionCombo.getValue();
            String bookCategories = Arrays.toString(selectedCategories.toArray());
-
-           if (bookName.isEmpty() || bookAuthor.isEmpty() || bookCondition.isEmpty() || bookCategories.isEmpty()) {
+           if (bookName.isEmpty() || bookAuthor.isEmpty() || bookCondition.isEmpty() || bookCategories.isEmpty() || bookCondition.equals("Choose Account Type")) {
                Error emptyFieldError = new Error("Submit error: One or more empty field");
                emptyFieldError.displayError(pane, mainScene);
            } else if (imageFile.get() == null) {
                Error imageError = new Error("Submit error: Image failed");
                imageError.displayError(pane, mainScene);
-           }
+           } else {
+               Book newBook = new Book(user.getId(), bookName, bookAuthor, bookCondition, bookCategories, user.getId(), imageFile.get());
+               JDBCConnection connection = new JDBCConnection();
+               if (connection.addBook(newBook)) {
+                   System.out.println("Book added: " + newBook.getName());
 
-            Book newBook = new Book(user.getId(), bookName, bookAuthor, bookCondition, bookCategories, user.getId(), imageFile.get());
-            JDBCConnection connection = new JDBCConnection();
-            if (connection.addBook(newBook)) {
-                System.out.println("Book added" + newBook.getName());
-            }
+                   this.tab = "LIST_SUCCESS";
+                   sceneController.switchScene(getScene());
+               }
+           }
         });
+        return pane;
+    }
+
+    public AnchorPane getListBookSuccess() {
+        AnchorPane pane = new AnchorPane();
+        Label titleLabel = new Label("Congrats!");
+        titleLabel.getStyleClass().add("h1");
+        titleLabel.setPadding(new Insets(20, 20, 20, 20));
+
+        VBox successBox = new VBox();
+        successBox.setSpacing(5);
+        successBox.setPadding(new Insets(20, 20, 20, 20));
+        successBox.setAlignment(Pos.CENTER);
+
+        HBox buttonBox = new HBox();
+        buttonBox.setAlignment(Pos.CENTER);
+
+        buttonBox.setSpacing(20);
+
+        Button listNewBookButton = new Button("List new Book");
+        listNewBookButton.getStyleClass().add("button");
+        listNewBookButton.getStyleClass().add("maroon");
+        listNewBookButton.getStyleClass().add("text-lg");
+
+        listNewBookButton.setOnAction(e -> {
+            this.tab = "LIST";
+            sceneController.switchScene(getScene());
+        });
+
+        Button returnButton = new Button("Return to dashboard");
+        returnButton.getStyleClass().add("button");
+        returnButton.getStyleClass().add("secondary");
+        returnButton.getStyleClass().add("text-lg");
+
+        returnButton.setOnAction(e -> {
+            this.tab = "DASHBOARD";
+            sceneController.switchScene(getScene());
+        });
+
+        buttonBox.getChildren().addAll(listNewBookButton, returnButton);
+
+        Label subLabel = new Label("Your book has been listed successfully. It is pending approval.");
+
+        subLabel.getStyleClass().add("h2");
+        subLabel.setPadding(new Insets(20, 20, 20, 20));
+
+        successBox.getChildren().addAll(titleLabel, subLabel, buttonBox);
+
+        pane.getChildren().addAll(successBox);
+
+        AnchorPane.setTopAnchor(successBox, 280.0);
+        AnchorPane.setLeftAnchor(successBox, 200.0);
+        String css = getClass().getResource("/com/example/cse360_project1/css/UserSettings.css").toExternalForm();
+        pane.getStylesheets().add(css);
+
         return pane;
     }
 
