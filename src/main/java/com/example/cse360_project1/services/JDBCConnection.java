@@ -28,7 +28,6 @@ public class JDBCConnection {
     public ResultSet fetchQuery(String query) throws SQLException {
         try {
             this.connection =  DriverManager.getConnection("jdbc:mysql://bookbetter-aws.czoua2woyqte.us-east-2.rds.amazonaws.com:3306/user", "admin", "!!mqsqlhubbard2024");
-
             Statement statement = connection.createStatement();
             this.result = statement.executeQuery(query);
             return result;
@@ -143,9 +142,14 @@ public class JDBCConnection {
     public boolean addBook(Book book) {
         int results = -1;
         try {
-            ResultSet collectionsResults = fetchQuery("SELECT FROM book_collections WHERE user_id = " + book.getCollectionID());
-            if (!collectionsResults.next()) {
+            String checkCollection = "SELECT COUNT(*) FROM book_collections WHERE user_id = ?";
+            PreparedStatement collectionStatement = connection.prepareStatement(checkCollection);
+            collectionStatement.setInt(1, book.getCollectionID());
+            int rowsInserted = collectionStatement.executeUpdate();
+            if (rowsInserted < 0) {
+                updateQuery("INSERT INTO book_collections (user_id) VALUE (" + book.getCollectionID() + ")");
             }
+
             if (book.getImage() == null) results = updateQuery("INSERT INTO books (collection_id, book_author, book_name, book_condition, book_categories) VALUES ('" + book.getCollectionID() + "', '" + book.getAuthor() + "', " + book.getCondition() + ", '" + book.getCategories() + "')");
             else {
                 String query = "INSERT INTO books (collection_id, book_author, book_name, book_condition, book_categories, book_image) VALUES (?, ?, ?, ?, CAST(? AS JSON), ?)";
