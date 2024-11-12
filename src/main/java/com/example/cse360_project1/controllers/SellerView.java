@@ -67,6 +67,11 @@ public class SellerView {
         }
     }
 
+    public HBox getOrderHBox(Book book) {
+        HBox hBox = new HBox();
+        return hBox;
+    }
+
     public AnchorPane getDashboard(Scene mainScene) {
         AnchorPane pane = new AnchorPane();
         Label titleLabel = new Label("Hey " + user.getName() + ",");
@@ -92,7 +97,6 @@ public class SellerView {
         VBox recentOrders = new VBox();
         recentOrders.getStyleClass().add("blurb");
         recentOrders.getStyleClass().add("wide");
-        recentOrders.setSpacing(20.0);
 
         Label recentOrdersLabel = new Label("Recent Orders");
         recentOrdersLabel.getStyleClass().add("h2");
@@ -104,6 +108,7 @@ public class SellerView {
             this.tab = "TRANSACTIONS";
             sceneController.switchScene(getScene());
         });
+
         HBox headerBox = new HBox();
         headerBox.setPadding(new Insets(20, 20, 20, 20));
         // Keep gap in between
@@ -111,7 +116,31 @@ public class SellerView {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         headerBox.getChildren().addAll(recentOrdersLabel, spacer, viewAllButton);
 
-        recentOrders.getChildren().add(headerBox);
+        HBox orderTableHeader = new HBox();
+        orderTableHeader.setPadding(new Insets(0, 20, 0, 20));
+        orderTableHeader.setSpacing(90);
+
+        Label dateLabel = new Label("Date");
+        dateLabel.getStyleClass().add("h3");
+
+        Label orderNumLabel = new Label("Order num");
+        orderNumLabel.getStyleClass().add("h3");
+
+        Label bookNameLabel = new Label("Book name");
+        bookNameLabel.getStyleClass().add("h3");
+
+        Label statusLabel = new Label("Status");
+        statusLabel.getStyleClass().add("h3");
+
+        Label priceLabel = new Label("Price");
+        priceLabel.getStyleClass().add("h3");
+
+        Label actionLabel = new Label("Action");
+        actionLabel.getStyleClass().add("h3");
+
+        orderTableHeader.getChildren().addAll(dateLabel, orderNumLabel, bookNameLabel, statusLabel, priceLabel, actionLabel);
+
+        recentOrders.getChildren().addAll(headerBox, orderTableHeader);
 
         pane.getChildren().addAll(titleLabel, subtitleLabel, totalRevenue, recentOrders);
         String css = getClass().getResource("/com/example/cse360_project1/css/SellerView.css").toExternalForm();
