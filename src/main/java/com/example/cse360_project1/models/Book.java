@@ -1,6 +1,7 @@
 package com.example.cse360_project1.models;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Book {
@@ -12,7 +13,10 @@ public class Book {
     private int collectionID;
     private double price;
     private File image;
+    private String date;
     public Book(int id, String name, String author, String condition, String categoiesJSON, int collectionID) {
+        LocalDate today = LocalDate.now();
+        this.date = today.toString();
         this.id = id;
         this.name = name;
         this.author = author;
@@ -35,6 +39,8 @@ public class Book {
         this.categories = parseJSON(categoiesJSON);
         this.collectionID = collectionID;
         this.image = image;
+        LocalDate today = LocalDate.now();
+        this.date = today.toString();
 
         switch (condition) {
             case "New" -> this.price = 10.50 * 2;
@@ -47,6 +53,12 @@ public class Book {
     }
     public void setId(int id) {
         this.id = id;
+    }
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
     }
     public String getName() {
         return name;

@@ -2,12 +2,14 @@ package com.example.cse360_project1.controllers;
 
 import com.example.cse360_project1.models.Book;
 import com.example.cse360_project1.models.Error;
+import com.example.cse360_project1.models.Transaction;
 import com.example.cse360_project1.models.User;
 import com.example.cse360_project1.services.JDBCConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -16,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -67,9 +70,33 @@ public class SellerView {
         }
     }
 
-    public HBox getOrderHBox(Book book) {
+    public HBox getOrderHBox(Transaction transaction) {
         HBox hBox = new HBox();
+        hBox.setPadding(new Insets(10, 0, 10, 0));
+        hBox.setSpacing(10);
+        Label dateLabel = new Label(transaction.getDate().toString());
+
+        Label orderNumLabel = new Label("#" + transaction.getId());
+
+        Label bookName = new Label(transaction.getBook().getName());
+
+        Label statusLabel = new Label(transaction.getStatus());
+
+        Label priceLabel = new Label("" + transaction.getPrice());
+
+        Button actionButton = new Button("View");
+        actionButton.getStyleClass().add("button");
+        actionButton.getStyleClass().add("maroon");
+
+        hBox.getChildren().addAll(dateLabel, orderNumLabel, bookName, statusLabel, priceLabel, actionButton);
+
         return hBox;
+    }
+
+    public VBox getAllOrders(User user) {
+        VBox orderVBox = new VBox();
+
+        return orderVBox;
     }
 
     public AnchorPane getDashboard(Scene mainScene) {
@@ -97,7 +124,7 @@ public class SellerView {
         VBox recentOrders = new VBox();
         recentOrders.getStyleClass().add("blurb");
         recentOrders.getStyleClass().add("wide");
-
+        recentOrders.setPadding(new Insets(20, 20, 20, 20));
         Label recentOrdersLabel = new Label("Recent Orders");
         recentOrdersLabel.getStyleClass().add("h2");
 
@@ -110,39 +137,30 @@ public class SellerView {
         });
 
         HBox headerBox = new HBox();
-        headerBox.setPadding(new Insets(20, 20, 20, 20));
+        headerBox.setPadding(new Insets(0, 0, 10, 0));
         // Keep gap in between
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         headerBox.getChildren().addAll(recentOrdersLabel, spacer, viewAllButton);
 
-        HBox orderTableHeader = new HBox();
-        orderTableHeader.setPadding(new Insets(0, 20, 0, 20));
-        orderTableHeader.setSpacing(90);
+        TableView orderTable = new TableView();
 
-        Label dateLabel = new Label("Date");
-        dateLabel.getStyleClass().add("h3");
+        orderTable.setEditable(false);
+        orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn dateColumn = new TableColumn("Date");
+        TableColumn orderNumColumn = new TableColumn("Order num");
+        TableColumn bookNameColumn = new TableColumn("Book name");
+        TableColumn statusColumn = new TableColumn("Status");
+        TableColumn priceColumn = new TableColumn("Price");
 
-        Label orderNumLabel = new Label("Order num");
-        orderNumLabel.getStyleClass().add("h3");
+        ObservableList<Transaction> data = FXCollections.observableArrayList();
+        orderTable.getColumns().addAll(dateColumn, orderNumColumn, bookNameColumn, statusColumn, priceColumn);
 
-        Label bookNameLabel = new Label("Book name");
-        bookNameLabel.getStyleClass().add("h3");
+        recentOrders.getChildren().addAll(headerBox, orderTable);
 
-        Label statusLabel = new Label("Status");
-        statusLabel.getStyleClass().add("h3");
-
-        Label priceLabel = new Label("Price");
-        priceLabel.getStyleClass().add("h3");
-
-        Label actionLabel = new Label("Action");
-        actionLabel.getStyleClass().add("h3");
-
-        orderTableHeader.getChildren().addAll(dateLabel, orderNumLabel, bookNameLabel, statusLabel, priceLabel, actionLabel);
-
-        recentOrders.getChildren().addAll(headerBox, orderTableHeader);
 
         pane.getChildren().addAll(titleLabel, subtitleLabel, totalRevenue, recentOrders);
+
         String css = getClass().getResource("/com/example/cse360_project1/css/SellerView.css").toExternalForm();
         AnchorPane.setTopAnchor(titleLabel, 30.0);
         AnchorPane.setLeftAnchor(titleLabel, 50.0);

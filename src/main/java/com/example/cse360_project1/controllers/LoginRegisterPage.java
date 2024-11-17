@@ -104,7 +104,7 @@ public class LoginRegisterPage {
             String userID = registerUsername.getText();
             String password = registerPassword.getText();
             String confirmPassword = registerConfirmPassword.getText();
-            String accountType = registerType.getSelectionModel().getSelectedItem();
+            String accountType = registerType.getSelectionModel().getSelectedItem().toUpperCase();
             // Error handling
             if (userID.isEmpty() || password.isEmpty()) {
                 Error registerError = new Error("Registration failed: Empty required field");
