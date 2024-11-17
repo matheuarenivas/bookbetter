@@ -85,8 +85,9 @@ public class JDBCConnection {
                 } else {
                     newUserId++;
                 }
+                System.out.println(newUserId);
             }
-            int updateResult = updateQuery("INSERT INTO users (id, username, password, type) VALUES ('" + newUserId + "', '" + username + "', '" + password + "', '" + type + "')");
+            int updateResult = updateQuery("INSERT INTO users (id, username, password, type) VALUES ('" + (newUserId + 1) + "', '" + username + "', '" + password + "', '" + type + "')");
             User newUser = new User(newUserId, username, type, password);
             return newUser;
         } catch (SQLException e) {
