@@ -78,17 +78,6 @@ public class User {
         return conditionsCount;
     }
 
-    public void registerUser() {
-        try {
-            Connection connection =  DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/user_schema", "root", "!!mqsqlhubbard2024");
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery("INSERT INTO users (username, password) VALUES ('" + name + "', '" + password + "')");
-            System.out.println(results);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public String toString() {
         return id + " | " + name + " " + userType;

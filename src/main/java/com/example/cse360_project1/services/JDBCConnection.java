@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.sql.DriverManager;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class JDBCConnection {
     Connection connection;
@@ -52,30 +53,6 @@ public class JDBCConnection {
 
         return -1;
     }
-    public ResultSet logIn(String username, String password) {
-        try {
-            this.result = fetchQuery("SELECT * FROM users WHERE username = '" + username + "'");
-
-            if (result.next()) {
-                String pass = result.getString("password");
-                if (password.equals(pass)) {
-                    int id = result.getInt("id");
-                    String type = result.getString("type");
-
-                    User user = new User((int) id, username, type, password);
-                    System.out.println(user.toString());
-                    SceneController sceneController = Main.sceneController;
-                    UserSettingsPage userSettingsPage = new UserSettingsPage(user, sceneController);
-
-                    // Get the user info scene and pass the main scene for returning
-                    sceneController.switchScene(userSettingsPage.getScene());
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     public User logInReturnUser(String username, String password) {
         try {
             this.result = fetchQuery("SELECT * FROM users WHERE username = '" + username + "'");
@@ -100,16 +77,18 @@ public class JDBCConnection {
     }
     public User registerUser(String username, String password, String type) {
         try {
-            ResultSet results = fetchQuery("SELECT COUNT(*) FROM users;");
-            if (results.next()) {
-
-                int id = results.getInt(1) + 1;
-                int updateResult = updateQuery("INSERT INTO users (id, username, password, type) VALUES ('" + id + "', '" + username + "', '" + password + "', '" + type + "')");
-                User newUser = new User(id, username, type, password);
-                // Get the user info scene and pass the main scene for returning
-                return newUser;
+            ResultSet getUserIds = fetchQuery("SELECT * FROM users");
+             int newUserId = 0;
+            while (getUserIds.next()) {
+                if (newUserId == 0) {
+                    newUserId = getUserIds.getInt("id");
+                } else {
+                    newUserId++;
+                }
             }
-
+            int updateResult = updateQuery("INSERT INTO users (id, username, password, type) VALUES ('" + newUserId + "', '" + username + "', '" + password + "', '" + type + "')");
+            User newUser = new User(newUserId, username, type, password);
+            return newUser;
         } catch (SQLException e) {
             e.printStackTrace();
         }
