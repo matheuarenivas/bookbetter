@@ -70,7 +70,7 @@ public class SidePanel {
                 sceneController.switchScene(sellerView.getScene());
             });
 
-            generalArea.getChildren().addAll(dashboard, list, transactions);
+            generalArea.getChildren().addAll(dashboard, list, editListing, transactions);
         }
         else if (user.getUserType().equals("ADMIN")) {
             Button dashboard = new Button("Dashboard");
