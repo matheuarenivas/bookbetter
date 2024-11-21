@@ -60,6 +60,11 @@ public class SidePanel {
                 sceneController.switchScene(sellerView.getScene());
             });
 
+            editListing.setOnAction(e -> {
+                sellerView.setTab("EDIT LISTINGS");
+                sceneController.switchScene(sellerView.getScene());
+            });
+
             transactions.setOnAction(e -> {
                 sellerView.setTab("TRANSACTIONS");
                 sceneController.switchScene(sellerView.getScene());
