@@ -404,6 +404,83 @@ public class SellerView {
         return pane;
     }
 
+    public AnchorPane getEditListings(Scene mainScene) {
+        AnchorPane pane = new AnchorPane();
+        Label titleLabel = new Label("Edit Listings");
+        titleLabel.getStyleClass().add("h1");
+        titleLabel.setPadding(new Insets(20, 20, 20, 20));
+
+        VBox contentBox = new VBox();
+        contentBox.setPadding(new Insets(20, 20, 20, 20));
+        contentBox.getStyleClass().add("blurb");
+
+        //Get the user's listed books
+        JDBCConnection jdbcConnection = new JDBCConnection();
+        ArrayList<Book> userBooks = jdbcConnection.getBookCollection(user);
+        //If user does not have books listed
+        if (userBooks.isEmpty()) {
+            // No books listed
+            Label noBooksLabel = new Label("You currently have no books listed for sale.");
+            noBooksLabel.getStyleClass().add("h2");
+            contentBox.getChildren().add(noBooksLabel);
+        }
+        else{
+            //List of books
+            Label selectBookLabel = new Label("Select a Book");
+            selectBookLabel.getStyleClass().add("h3");
+            ListView<Book> bookListView = new ListView<>();
+            bookListView.getItems().addAll(userBooks);
+
+            Button editButton = new Button("Edit Selected Book");
+            editButton.getStyleClass().add("primary");
+
+            // Book details
+            VBox detailsForm = new VBox(10);
+
+            editButton.setOnAction(e -> {
+                Book selectedBook = bookListView.getSelectionModel().getSelectedItem();
+                if (selectedBook == null) {
+                    Error noSelectionError = new Error("Please select a book to edit.");
+                    noSelectionError.displayError(pane, mainScene);
+                }
+                else{
+                    populatedEditForm(detailsForm, selectedBook, jdbcConnection);
+                }
+            });
+
+            contentBox.getChildren().addAll(selectBookLabel, bookListView, editButton, detailsForm);
+        }
+
+        pane.getChildren().addAll(titleLabel, contentBox);
+        AnchorPane.setTopAnchor(titleLabel, 300.0);
+        AnchorPane.setLeftAnchor(titleLabel, 200.0);
+        AnchorPane.setTopAnchor(contentBox, 300.0);
+        return pane;
+    }
+
+    private void populatedEditForm(VBox detailsForm, Book book, JDBCConnection jdbcConnection) {
+        detailsForm.getChildren().clear();
+
+        //Name of book
+        Label bookNameLabel = new Label("Book Name:");
+        bookNameLabel.getStyleClass().add("h3");
+        TextField bookNameField = new TextField(book.getName());
+        bookNameField.getStyleClass().addAll("gray-border", "input");
+
+        //Author of book
+        Label authorLabel = new Label("Author Name:");
+        bookNameLabel.getStyleClass().add("h3");
+        TextField authorField = new TextField(book.getAuthor());
+        bookNameField.getStyleClass().addAll("gray-border", "input");
+
+        //Condition of book
+        Label conditionLabel = new Label("Book Condition:");
+        bookNameLabel.getStyleClass().add("h3");
+        ComboBox<String> conditionComboBox = new ComboBox<>();
+        conditionComboBox.getItems().addAll("Lightly used", "moderately used", "Heavily used");
+        conditionComboBox.setValue(book.getCondition());
+        conditionComboBox.getStyleClass().addAll("gray-border", "input");
+    }
     public AnchorPane getTransactions(Scene mainScene) {
         AnchorPane pane = new AnchorPane();
         Label titleLabel = new Label("Transactions");
