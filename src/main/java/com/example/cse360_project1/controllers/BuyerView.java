@@ -22,9 +22,19 @@ public class BuyerView {
     private final User user;
     private final SceneController sceneController;
     private String tab;
+    private static final Image PLACEHOLDER_IMAGE;
+    static {
+        try {
+            PLACEHOLDER_IMAGE = new Image(BuyerView.class.getResource("/com/example/cse360_project1/images/book.jpg").toExternalForm());
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Placeholder image not found. Ensure the path is correct.", e);
+        }
+    }
+    //private static final Image PLACEHOLDER_IMAGE = new Image("file:/absolute/path/to/book.jpg");
+    private ObservableList<Book> books = FXCollections.observableArrayList();
+
 
     private ObservableList<Book> cart = FXCollections.observableArrayList();
-
     public BuyerView(User user, SceneController sceneController) {
         this.user = user;
         this.sceneController = sceneController;
@@ -109,16 +119,9 @@ public class BuyerView {
 
         VBox booksGrid = new VBox(10);
         booksGrid.setPadding(new Insets(20));
-        booksGrid.setPrefWidth(600);
+        booksGrid.setPrefWidth(800);
 
-        // Add mock data for initial display
-        ObservableList<Book> allBooks = FXCollections.observableArrayList(
-                new Book(1, "Dune", "Frank Herbert", "Used Like New", "[\"Natural Science\", \"Sci-Fi\"]", 1, new File("/Users/matheuarenivas/Downloads/bookbetter-master/src/main/java/com/example/cse360_project1/controllers/book.jpg")),
-                new Book(2, "The Maze Runner", "James Dashner", "Moderately Used", "[\"Sci-Fi\"]", 2, new File("/Users/matheuarenivas/Downloads/bookbetter-master/src/main/java/com/example/cse360_project1/controllers/book.jpg")),
-                new Book(3, "Calculating Stars", "Mary Kowal", "Heavily Used", "[\"Math\", \"Sci-Fi\"]", 3, new File("/Users/matheuarenivas/Downloads/bookbetter-master/src/main/java/com/example/cse360_project1/controllers/book.jpg")),
-                new Book(4, "The Martian", "Andy Weir", "Used Like New", "[\"Sci-Fi\"]", 4, new File("/Users/matheuarenivas/Downloads/bookbetter-master/src/main/java/com/example/cse360_project1/controllers/book.jpg"))
-        );
-
+        ObservableList<Book> allBooks = Book.fetchAllBooksFromDatabase();
         populateBooksGrid(booksGrid, allBooks);
 
         Button filterButton = new Button("Filter Books");
@@ -146,8 +149,20 @@ public class BuyerView {
             populateBooksGrid(booksGrid, filteredBooks);
         });
 
-        VBox filterSection = new VBox(10, filters, filterButton);
-        HBox content = new HBox(20, filterSection, booksGrid);
+        Button refreshButton = new Button("Refresh Books");
+        refreshButton.setOnAction(e -> {
+            booksGrid.getChildren().clear();
+            ObservableList<Book> updatedBooks = Book.fetchAllBooksFromDatabase();
+            populateBooksGrid(booksGrid, updatedBooks);
+        });
+
+        VBox filterSection = new VBox(10, filters, filterButton, refreshButton);
+
+        ScrollPane scrollPane = new ScrollPane(booksGrid);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(800);
+
+        HBox content = new HBox(20, filterSection, scrollPane);
         content.setPadding(new Insets(20));
 
         AnchorPane.setTopAnchor(booksLabel, 30.0);
@@ -170,20 +185,18 @@ public class BuyerView {
         for (Book book : books) {
             HBox bookItem = new HBox(10);
 
-            // Create ImageView for Book Image
-            ImageView bookImageView;
-            if (book.getImage() != null && book.getImage().exists()) {
-                System.out.println("Loading image for: " + book.getName());
-                bookImageView = new ImageView(new Image(book.getImage().toURI().toString()));
+            ImageView bookImageView = new ImageView();
+            File bookImageFile = book.getImage();
+            if (bookImageFile != null && bookImageFile.exists()) {
+                bookImageView.setImage(new Image(bookImageFile.toURI().toString()));
             } else {
-                System.out.println("No image found for: " + book.getName());
-                bookImageView = new ImageView(new Image("/Users/matheuarenivas/Downloads/bookbetter-master/src/main/java/com/example/cse360_project1/controllers/book.jpg"));
+                bookImageView.setImage(PLACEHOLDER_IMAGE);
             }
             bookImageView.setFitWidth(100);
-            bookImageView.setFitHeight(150);
+            bookImageView.setFitHeight(120);
 
-            Label bookDetails = new Label(book.getName() + " by " + book.getAuthor() + " - $" + book.getPrice());
-            Button addToCartButton = new Button("Add");
+            Label bookDetails = new Label(book.getName() + " by " + book.getAuthor() + " - " + book.getCondition());
+            Button addToCartButton = new Button("Add to Cart");
             addToCartButton.setOnAction(event -> addToCart(book));
 
             bookItem.getChildren().addAll(bookImageView, bookDetails, addToCartButton);
@@ -200,8 +213,7 @@ public class BuyerView {
     public AnchorPane getOrderHistory(Scene mainScene) {
         AnchorPane pane = new AnchorPane();
 
-        Label orderHistoryLabel = new Label("Order History");
-        orderHistoryLabel.getStyleClass().add("h1");
+        Label orderHistoryLabel = new Label("Order History"); orderHistoryLabel.getStyleClass().add("h1");
         orderHistoryLabel.setPadding(new Insets(20, 20, 20, 20));
         Label subtitleLabel = new Label("View your past orders");
         subtitleLabel.setPadding(new Insets(10, 20, 20, 20));

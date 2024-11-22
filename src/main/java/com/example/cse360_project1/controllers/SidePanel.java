@@ -60,17 +60,12 @@ public class SidePanel {
                 sceneController.switchScene(sellerView.getScene());
             });
 
-            editListing.setOnAction(e -> {
-                sellerView.setTab("EDIT LISTINGS");
-                sceneController.switchScene(sellerView.getScene());
-            });
-
             transactions.setOnAction(e -> {
                 sellerView.setTab("TRANSACTIONS");
                 sceneController.switchScene(sellerView.getScene());
             });
 
-            generalArea.getChildren().addAll(dashboard, list, editListing, transactions);
+            generalArea.getChildren().addAll(dashboard, list, transactions);
         }
         else if (user.getUserType().equals("ADMIN")) {
             Button dashboard = new Button("Dashboard");
@@ -121,13 +116,13 @@ public class SidePanel {
 
             browse.setOnAction(e -> {
                 buyerView.setTab("BROWSE");
-                    sceneController.switchScene(buyerView.getScene());
+                sceneController.switchScene(buyerView.getScene());
 
             });
 
             orderHistory.setOnAction(e -> {
                 buyerView.setTab("ORDERS");
-                    sceneController.switchScene(buyerView.getScene());
+                sceneController.switchScene(buyerView.getScene());
 
             });
 
