@@ -59,16 +59,10 @@ public class BuyerView {
         for (Book book : books) {
             File imageFile = images.get(book.getId());
             if (imageFile != null) {
-                book.setImage(imageFile); // Assign image to the book
+                book.setImage(imageFile);
             }
         }
         activeBooks = FXCollections.observableArrayList(books);
-
-        cart.addListener((ListChangeListener.Change<? extends Book> change) -> {
-            if ("CART".equals(tab)) {
-                sceneController.setContent(getCart(sceneController.getCurrentScene()));
-            }
-        });
     }
 
     public Scene getScene() {
@@ -498,7 +492,5 @@ public class BuyerView {
 
     public void setTab(String tab) {
         this.tab = tab;
-        AnchorPane content = getContentPane(sceneController.getCurrentScene());
-        sceneController.setContent(getContentPane(sceneController.getCurrentScene()));
     }
 }
